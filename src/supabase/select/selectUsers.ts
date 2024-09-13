@@ -1,7 +1,7 @@
 import { supabase } from "../supabaseClient";
 import { User } from "@/types/user";
 
-const selectUsers = async (): Promise<User[] | boolean> => {
+const selectUsers = async (): Promise<User[] | null> => {
     try {
         const { data, error } = await supabase
             .from("users")
@@ -14,7 +14,7 @@ const selectUsers = async (): Promise<User[] | boolean> => {
         return data as User[];
     } catch (err) {
         console.error("selectUsers内のエラーは->", err);
-        return false;
+        return null;
     }
 }
 
