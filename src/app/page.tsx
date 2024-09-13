@@ -19,6 +19,7 @@ const Home = () => {
         <>
             <h1>usersテーブルの中身</h1>
             <pre>{JSON.stringify(users, null, 2)}</pre>
+            <br />
         </>
     );
 };
