@@ -1,6 +1,6 @@
 "use client";
 
-import selectUsers from "@/supabase/select/selectUsers";
+import selectUsers from "@/supabase/CRUD/selectUsers";
 import { useState, useEffect } from "react";
 import { User } from "@/types/user";
 import Link from 'next/link'

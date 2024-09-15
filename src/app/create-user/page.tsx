@@ -1,6 +1,6 @@
 'use client';
 
-import insertUser from "@/supabase/insert/insertUser";
+import insertUser from "@/supabase/CRUD/insertUser";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 

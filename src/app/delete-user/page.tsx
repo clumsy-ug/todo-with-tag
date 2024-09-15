@@ -1,6 +1,6 @@
 'use client';
 
-import deleteUser from "@/supabase/delete/deleteUser";
+import deleteUser from "@/supabase/CRUD/deleteUser";
 import { useState } from "react";
 import {useRouter} from "next/navigation";
 

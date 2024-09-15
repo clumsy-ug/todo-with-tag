@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import updateUser from "@/supabase/update/updateUser";
+import updateUser from "@/supabase/CRUD/updateUser";
 
 const UpdateUser = () => {
     const [id, setId] = useState<number>(0);

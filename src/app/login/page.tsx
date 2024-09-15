@@ -1,6 +1,11 @@
+import { createClient } from "@/supabase/server";
 import { login, signup } from "./actions";
 
 export default function LoginPage() {
+    
+    const supabase = createClient();
+    const { data: { session } } = await supabase.auth.getSession();
+
     return (
         <form>
             <label htmlFor="email">Email:</label>
