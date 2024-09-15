@@ -1,6 +1,8 @@
-import { supabase } from "../client";
+import { createClient } from "../client";
 
 const deleteUser = async (id: number): Promise<Boolean> => {
+    const supabase = createClient();
+    
     try {
         const {error} = await supabase
             .from('users')

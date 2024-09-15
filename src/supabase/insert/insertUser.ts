@@ -1,6 +1,8 @@
-import { supabase } from "../client";
+import { createClient } from "../client";
 
 const insertUser = async (name: string): Promise<boolean> => {
+    const supabase = createClient();
+    
     try {
         const { error } = await supabase
             .from("users")
