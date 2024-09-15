@@ -13,7 +13,7 @@ const Home = async () => {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) globalSession = session;
     } catch (e) {
-        console.error(e);
+        console.error('Home内のエラー->', e);
     }
 
     return (

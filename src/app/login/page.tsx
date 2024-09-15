@@ -13,7 +13,7 @@ const LoginPage = async () => {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) globalSession = session;
     } catch (e) {
-        console.error(e);
+        console.error('LoginPage内のエラー->', e);
     }
 
     return (
