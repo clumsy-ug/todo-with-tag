@@ -1,27 +1,21 @@
-"use client";
+import { createClient } from "@/supabase/server";
+import SignOutButton from "@/components/SignOutButton";
 
-import selectUsers from "@/supabase/select/selectUsers";
-import { useState, useEffect } from "react";
-import { User } from "@/types/user";
-
-const Home = () => {
-    const [users, setUsers] = useState<User[] | null>([]);
-
-    useEffect(() => {
-        const getUsers = async () => {
-            const users = await selectUsers();
-            setUsers(users);
-        };
-        getUsers();
-    }, []);
+export default async function Home() {
+    const supabase = createClient();
+    const { data: { session } } = await supabase.auth.getSession();
 
     return (
-        <>
-            <h1>usersテーブルの中身</h1>
-            <pre>{JSON.stringify(users, null, 2)}</pre>
-            <br />
-        </>
+        <div>
+            <h1>Welcome to the home page</h1>
+            {session ? (
+                <>
+                    <p>You are logged in as <b>{session.user.email}</b></p>
+                    <SignOutButton />
+                </>
+            ) : (
+                <p>You are not logged in</p>
+            )}
+        </div>
     );
-};
-
-export default Home;
+}

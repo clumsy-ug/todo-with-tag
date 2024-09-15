@@ -1,7 +1,9 @@
-import { supabase } from "../supabaseClient";
+import { createClient } from "../client";
 import { User } from "@/types/user";
 
 const selectUsers = async (): Promise<User[] | null> => {
+    const supabase = createClient();
+    
     try {
         const { data, error } = await supabase
             .from("users")

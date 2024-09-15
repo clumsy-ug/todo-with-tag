@@ -1,4 +1,4 @@
-import { supabase } from "../supabaseClient";
+import { supabase } from "../client";
 
 const updateUser = async (id: number, name: string): Promise<Boolean> => {
     try {

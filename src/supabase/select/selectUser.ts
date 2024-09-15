@@ -1,4 +1,4 @@
-import { supabase } from "../supabaseClient";
+import { supabase } from "../client";
 import { User } from "@/types/user";
 
 const selectUser = async (id: number): Promise<User | null> => {

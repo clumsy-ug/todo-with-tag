@@ -1,4 +1,4 @@
-import { supabase } from "../supabaseClient";
+import { supabase } from "../client";
 
 const insertUser = async (name: string): Promise<boolean> => {
     try {
