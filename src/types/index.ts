@@ -5,18 +5,18 @@ export interface User {
 }
 
 export interface Todo {
-    id: string,
+    id?: string,
     user_id: string,
     content: string,
     created_at?: string
 }
 
 export interface Tag {
-    id: string,
+    id?: string,
     name: string
 }
 
 export interface Todo_Tag {
-    todo_id: string,
-    tag_id: string
+    todo_id?: string,
+    tag_id?: string
 }
