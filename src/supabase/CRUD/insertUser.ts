@@ -1,20 +1,21 @@
 import { createClient } from "../client";
 
-const insertUser = async (name: string): Promise<boolean> => {
+const insertUser = async (id: string, email: string): Promise<boolean> => {
     const supabase = createClient();
-    
+
     try {
         const { error } = await supabase
             .from("users")
-            .insert({ name: name });
+            .insert({ id: id, email: email });
 
         if (error) {
-            console.error(error);
+            console.error("insertUser内のerror", error);
+            return false;
         }
 
         return true;
     } catch (e) {
-        console.error("insertUser内のエラーは->", e);
+        console.error("insertUser内のe", e);
         return false;
     }
 };

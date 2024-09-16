@@ -1,25 +1,26 @@
-import { createClient } from "../client";
 import { User } from "@/types/user";
+import { createClient } from "../client";
 
-const selectUser = async (id: number): Promise<User | null> => {
+const selectUser = async (id: string): Promise<User | null> => {
     const supabase = createClient();
 
     try {
         const { data, error } = await supabase
             .from("users")
             .select()
-            .eq('id', id)
+            .eq("id", id)
             .single();
-    
+
         if (error) {
-            throw error;
+            console.error("selectUser内のerror->", error);
+            return null;
         }
 
         return data as User;
-    } catch (err) {
-        console.error("selectUsers内のエラーは->", err);
+    } catch (e) {
+        console.error("selectUser内のe->", e);
         return null;
     }
-}
+};
 
 export default selectUser;

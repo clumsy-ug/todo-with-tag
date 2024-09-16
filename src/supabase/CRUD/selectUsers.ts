@@ -1,23 +1,23 @@
-import { createClient } from "../client";
-import { User } from "@/types/user";
+// import { createClient } from "../client";
+// import { User } from "@/types/user";
 
-const selectUsers = async (): Promise<User[] | null> => {
-    const supabase = createClient();
+// const selectUsers = async (): Promise<User[] | null> => {
+//     const supabase = createClient();
     
-    try {
-        const { data, error } = await supabase
-            .from("users")
-            .select();
+//     try {
+//         const { data, error } = await supabase
+//             .from("users")
+//             .select();
     
-        if (error) {
-            throw error;
-        }
+//         if (error) {
+//             throw error;
+//         }
 
-        return data as User[];
-    } catch (err) {
-        console.error("selectUsers内のエラーは->", err);
-        return null;
-    }
-}
+//         return data as User[];
+//     } catch (err) {
+//         console.error("selectUsers内のエラーは->", err);
+//         return null;
+//     }
+// }
 
-export default selectUsers;
+// export default selectUsers;
