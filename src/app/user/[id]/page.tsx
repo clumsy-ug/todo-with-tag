@@ -3,7 +3,7 @@
 "use client";
 
 import selectUser from "@/supabase/CRUD/selectUser";
-import { User } from "@/types/user";
+import { User } from "@/types";
 import { useEffect, useState } from "react";
 
 const UserTodos = ({ params }: { params: { id: string } }) => {

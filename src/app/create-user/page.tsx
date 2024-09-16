@@ -1,40 +1,42 @@
-// 'use client';
+"use client";
 
-// import insertUser from "@/supabase/CRUD/insertUser";
-// import { useState } from "react";
-// import { useRouter } from "next/navigation";
+import { createClient } from "@/supabase/client";
+import { useState } from "react";
+import insertUser from "@/supabase/CRUD/insertUser";
+import toast, { Toaster } from "react-hot-toast";
 
-// const CreateUser = () => {
-//     const [name, setName] = useState<string>('');
-//     const router = useRouter();
+const CreateUser = () => {
+    const supabase = createClient();
+    const [id, setId] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
 
-//     const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
-//         e.preventDefault();
+    const func = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        const userId = user?.id;
+        if (userId) setId(userId);
+        const userEmail = user?.email;
+        if (userEmail) setEmail(userEmail);
+    };
+    func();
 
-//         try {
-//             const isSuccess = await insertUser(name);
-//             if (isSuccess) {
-//                 console.log('Success!');
-//                 router.push('/');
-//             } else {
-//                 console.error('Failure');
-//             }
-//         } catch (e) {
-//             console.error('handleCreate内のエラーは->', e);
-//         }
-//     }
+    const handleInsert = async () => {
+        const isSuccess = await insertUser(id, email);
+        if (isSuccess) {
+            toast.success('insert完了!');
+        } else {
+            toast.error('insert失敗!');
+        }
+    }
 
-//     return (
-//         <form onSubmit={handleCreate}>
-//             <input
-//                 placeholder="名前"
-//                 type="text"
-//                 required
-//                 onChange={(e) => setName(e.target.value)}
-//             />
-//             <button type="submit">登録</button>
-//         </form>
-//     )
-// }
+    return (
+        <>
+            <Toaster />
+            <p>idは: {id}</p>
+            <p>emailは: {email}</p>
 
-// export default CreateUser;
+            <button onClick={handleInsert}>insertUser!</button>
+        </>
+    );
+};
+
+export default CreateUser;

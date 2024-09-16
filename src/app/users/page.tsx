@@ -2,7 +2,7 @@
 
 import selectUsers from "@/supabase/CRUD/selectUsers";
 import { useState, useEffect } from "react";
-import { User } from "@/types/user";
+import { User } from "@/types";
 import Link from 'next/link'
 
 const Home = () => {
