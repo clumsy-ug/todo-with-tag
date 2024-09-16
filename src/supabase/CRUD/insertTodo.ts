@@ -1,12 +1,12 @@
-import { createClient } from "../server";
+import { createClient } from "../client";
 
-const insertTodo = async (content: string, userId: string): Promise<boolean> => {
+const insertTodo = async (userId: string, content: string): Promise<boolean> => {
     const supabase = createClient();
 
     try {
         const { error } = await supabase
             .from('todos')
-            .insert({ content: content, user_id: userId });
+            .insert({ user_id: userId, content: content });
 
         if (error) {
             console.error('insertTodo内のerror->', error);
