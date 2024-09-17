@@ -7,17 +7,23 @@ import insertTodo from "@/supabase/CRUD/insertTodo";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Todo } from "@/types";
+import { createClient } from "@/supabase/client";
 
 const UserTodos = ({ params }: { params: { id: string } }) => {
     const userId = params.id;
     const [content, setContent] = useState<string | null>(null);
     const [todos, setTodos] = useState<Todo[] | null>([]);
+    const [email, setEmail] = useState<string | null>(null);
+    const supabase = createClient();
 
     useEffect(() => {
         const getUserTodos = async () => {
             try {
                 const data = await selectUserTodos(userId);
                 if (data) setTodos(data);
+
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user) setEmail(user.email!);
             } catch (e) {
                 console.error('getUserTodos内のe->', e);
             }
@@ -42,10 +48,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
         <>
             <Toaster />
 
-            <h1>
-                {/* こんにちは、<b>{userState?.email}</b> */}
-                こんにちは！
-            </h1>
+            <h1>Welcome, <b style={{color: 'blue'}}>{email}</b></h1>
 
             <h2>あなたのTodo一覧</h2>
             {todos?.map((todo) => (
