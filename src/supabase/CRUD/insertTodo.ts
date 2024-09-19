@@ -1,22 +1,24 @@
+import { Todo } from "@/types";
 import { createClient } from "../client";
 
-const insertTodo = async (userId: string, content: string): Promise<boolean> => {
+const insertTodo = async (userId: string, content: string): Promise<Todo | null> => {
     const supabase = createClient();
 
     try {
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from('todos')
-            .insert({ user_id: userId, content: content });
+            .insert({ user_id: userId, content })
+            .select();
 
         if (error) {
             console.error('insertTodo内のerror->', error);
-            return false;
+            return null;
         }
 
-        return true;
+        return data[0];
     } catch (e) {
         console.error('insertTodo内のe->', e);
-        return false;
+        return null;
     }
 }
 

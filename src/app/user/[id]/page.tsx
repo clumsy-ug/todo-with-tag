@@ -68,10 +68,10 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
         if (userId === sessionUserId) {
             if (content) {
                 try {
-                    const isSuccess = await insertTodo(userId, content);
-                    if (isSuccess) {
+                    const newTodo = await insertTodo(userId, content);
+                    if (newTodo) {
                         toast.success('登録完了!');
-                        setTodos(prev => [ ...prev, { user_id: userId, content } ])
+                        setTodos(prev => [ ...prev, { id: newTodo.id, user_id: userId, content } ])
                         setContent('');
                     } else {
                         toast.error('登録失敗!');
