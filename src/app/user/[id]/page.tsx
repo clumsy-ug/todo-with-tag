@@ -12,8 +12,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { createClient } from "@/supabase/client";
 
 const UserTodos = ({ params }: { params: { id: string } }) => {
-    const userId = params.id;  // ただurlに入力されている文字列(信頼性低い)
-    const [sessionUserId, setSessionUserId] = useState<string>('');  // 実際にログインしているuserのid(信頼性高い)
+    const userId = params.id;  // ただurlに入力されている文字列(信頼性低いが即取得可)
+    const [sessionUserId, setSessionUserId] = useState<string>('');  // 実際にログインしているuserのid(信頼性高いが即取得不可)
     const [content, setContent] = useState<string>('');
     const [todos, setTodos] = useState<Todo[]>([]);
     const [email, setEmail] = useState<string>('');
@@ -28,14 +28,20 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             try {
                 setIsLoading(true);
                 const { data: { user } } = await supabase.auth.getUser();
-                if (user?.id) setSessionUserId(user.id)
-                if (user) {
-                    setEmail(user.email!);
+
+                if (user && user.id) {
+                    setSessionUserId(user.id);
                 } else {
-                    console.info('getUser()でfalsyな値が返ってきました');
+                    console.error('userもしくはuserのidが見つかりません');
+                }
+
+                if (user && user.email) {
+                    setEmail(user.email);
+                } else {
+                    console.error('userもしくはuserのemailが見つかりません');
                 }            
             } catch (e) {
-                console.error('getUserで発生したエラー->', e);
+                console.error('getUserで発生したeー->', e);
             }
 
             // Userのtodo一覧を取得
@@ -47,7 +53,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                     console.error('selectUserTodos()でfalsyな値が返ってきました');
                 }
             } catch (e) {
-                console.error('selectUserTodosで発生したエラー->', e);
+                console.error('selectUserTodosで発生したe->', e);
             } finally {
                 setIsLoading(false);
             }
@@ -65,9 +71,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                     const isSuccess = await insertTodo(userId, content);
                     if (isSuccess) {
                         toast.success('登録完了!');
-                        /* task: setTodosで更新 */
                         setTodos(prev => [ ...prev, { user_id: userId, content } ])
-                        /* task: content(=新規登録のinput欄)を空にする */
                         setContent('');
                     } else {
                         toast.error('登録失敗!');
@@ -87,7 +91,6 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
 
     const handleUpdateTodo = async (todoId: string, currentContent: string) => {
         const newContent = prompt('編集内容を入力してください', currentContent);
-        /* task: 空だった場合 と 変更なしで登録された場合　のvalidation */
         if (!newContent) {
             toast.error('空欄で登録はできません!');
             return;
@@ -101,7 +104,6 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
 
         try {
             const isSuccess = await updateTodo(todoId, newContent!);
-            /* task: 成功したらtodosを更新 */
             if (isSuccess) {
                 toast.success('編集完了!');
                 setTodos(prev => prev.map(todo => 
@@ -153,7 +155,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             )}
 
             <h2>あなたのTodo一覧</h2>
-            {todos?.map((todo, index) => (
+            {todos && todos.map((todo, index) => (
                 <ul key={index}>
                     <li>{todo.content}</li>
                     <p className={todo.id ? '' : 'text-red-500'}>
