@@ -2,12 +2,13 @@
 
 "use client";
 
+import { Todo } from "@/types";
 import selectUserTodos from "@/supabase/CRUD/selectTodos";
 import insertTodo from "@/supabase/CRUD/insertTodo";
 import updateTodo from "@/supabase/CRUD/updateTodo";
+import deleteTodo from "@/supabase/CRUD/deleteTodo";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { Todo } from "@/types";
 import { createClient } from "@/supabase/client";
 
 const UserTodos = ({ params }: { params: { id: string } }) => {
@@ -43,7 +44,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                 if (userTodos) {
                     setTodos(userTodos);
                 } else {
-                    console.info('selectUserTodos()でfalsyな値が返ってきました');
+                    console.error('selectUserTodos()でfalsyな値が返ってきました');
                 }
             } catch (e) {
                 console.error('selectUserTodosで発生したエラー->', e);
@@ -108,11 +109,31 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                 ));
             } else {
                 toast.error('編集失敗!');
-                console.error('handleUpdateTodo内でisSuccessがfalsyになった!');
+                console.error('updateTodoの返り値がfalsyになった!');
             }
         } catch (e) {
             toast.error('編集が失敗しました!');
             console.error('handleUpdateTodo内のe->', e);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    const handleDeleteTodo = async (todoId: string) => {
+        setIsLoading(true);
+
+        try {
+            const isSuccess = await deleteTodo(todoId);
+            if (isSuccess) {
+                toast.success('削除完了!');
+                setTodos(prev => prev.filter(todo => todo.id !== todoId));
+            } else {
+                toast.error('削除失敗!');
+                console.error('deleteTodoの返り値がfalsyになった');
+            }
+        } catch (e) {
+            toast.error('削除失敗!');
+            console.error('handleDeleteTodo内のe->', e);
         } finally {
             setIsLoading(false);
         }
@@ -139,6 +160,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                         id: {todo.id || 'DBからidを取得するためにページをリロードしてください'}
                     </p>
                     <button onClick={() => handleUpdateTodo(todo.id!, todo.content)}>編集</button>
+                    <button onClick={() => handleDeleteTodo(todo.id!)}>削除</button>
                 </ul>
             ))}
 
