@@ -15,7 +15,8 @@ const selectUserTodos = async (userId: string): Promise<Todo[] | null> => {
             return null;
         }
 
-        return data as Todo[];;
+        // このTodo[]は、空配列つまり[]も含むため、todoを1件も登録していないUserの場合でもエラーにはならず正常に動作させることができる
+        return data as Todo[];
     } catch (e) {
         console.error('selectUserTodos内のe->', e);
         return null;
