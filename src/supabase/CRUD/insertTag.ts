@@ -7,24 +7,24 @@ front側でtags内をmapでまわして、各要素に対して以下のinsertTa
 
 import { createClient } from "../client";
 
-const insertTag = async (name: string): Promise<string | null> => {
+const insertTag = async (id: string, name: string): Promise<boolean> => {
     const supabase = createClient();
 
     try {
         const { data, error } = await supabase
             .from('tags')
-            .insert({ name })
+            .insert({ id, name })
             .select();
 
         if (error) {
             console.error('insertTag内のerror->', error);
-            return null;
+            return false;
         }
 
-        return data[0].id;
+        return true;
     } catch (e) {
         console.error('insertTag内のe->', e);
-        return null;
+        return false;
     }
 }
 

@@ -2,23 +2,24 @@
 
 import { createClient } from "../client";
 
-const insertTodoIdAndTagId = async (todoId: string, tagId: string): Promise<boolean> => {
+const insertTodoIdAndTagId = async (todoId: string): Promise<string | null> => {
     const supabase = createClient();
 
     try {
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from('todos_tags')
-            .insert({ todo_id: todoId, tag_id: tagId });
+            .insert({ todo_id: todoId })
+            .select()
         
         if (error) {
             console.error('insertTodoIdAndTagId内のerror->', error);
-            return false;
+            return null;
         }
 
-        return true;
+        return data[0].tag_id;
     } catch (e) {
         console.error('insertTodoIdAndTagId内のe->', e);
-        return false;
+        return null;
     }
 }
 

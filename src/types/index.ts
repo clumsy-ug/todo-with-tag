@@ -12,11 +12,11 @@ export interface Todo {
 }
 
 export interface Tag {
-    id?: string,
+    id: string,
     name: string
 }
 
 export interface Todo_Tag {
     todo_id: string,
-    tag_id: string
+    tag_id?: string
 }

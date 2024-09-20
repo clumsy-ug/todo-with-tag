@@ -81,29 +81,58 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                         toast.error('登録失敗!');
                     }
 
-                    if (tags.length >= 1) {  // tagが1つ以上登録された場合
+                    // if (tags.length >= 1) {  // tagが1つ以上登録された場合
+                    //     tags.map(async (tag) => {
+                    //         try {
+                    //             const newTagId = await insertTag(tag);
+                    //             if (newTodo && newTodo.id && newTagId) {
+                    //                 try {
+                    //                     const isSuccess = await insertTodoIdAndTagId(newTodo.id, newTagId);
+                    //                     if (isSuccess) {
+                    //                         toast.success('登録成功!');
+                    //                         setTags([]);
+                    //                     } else {
+                    //                         console.error('insertTodoIdAndTagIdの実行結果がfalsyです');
+                    //                     }
+                    //                 } catch (e) {
+                    //                     console.error('insertTodoIdAndTagIdでe発生->', e);
+                    //                 }
+                    //             } else {
+                    //                 console.error('newTodo, newTodo.id, newTagIdのどれかがfalsyです');
+                    //             }
+                    //         } catch (e) {
+                    //             console.error('insertTagでe発生->', e);
+                    //         }
+                    //     });
+                    // }
+
+                    if (tags.length >= 1) {  // tagが1つ以上登録された場合                    
                         tags.map(async (tag) => {
-                            try {
-                                const newTagId = await insertTag(tag);
-                                if (newTodo && newTodo.id && newTagId) {
-                                    try {
-                                        const isSuccess = await insertTodoIdAndTagId(newTodo.id, newTagId);
-                                        if (isSuccess) {
-                                            toast.success('登録成功!');
-                                            setTags([]);
-                                        } else {
-                                            console.error('insertTodoIdAndTagIdの実行結果がfalsyです');
+                            if (newTodo && newTodo.id) {
+                                try {
+                                    const tagId = await insertTodoIdAndTagId(newTodo.id);
+                                    if (tagId) {
+                                        try {
+                                            const isSuccess = await insertTag(tagId, tag);
+                                            if (isSuccess) {
+                                                toast.success('登録完了!');
+                                                setTags([]);
+                                            } else {
+                                                console.error('insertTagの結果がfalsyだ!');
+                                            }
+                                        } catch (e) {
+                                            console.error('insertTagのe->', e);
                                         }
-                                    } catch (e) {
-                                        console.error('insertTodoIdAndTagIdでe発生->', e);
+                                    } else {
+                                        console.error('tagIdがfalsyだ!');
                                     }
-                                } else {
-                                    console.error('newTodo, newTodo.id, newTagIdのどれかがfalsyです');
+                                } catch (e) {
+                                    console.error('insertTodoIdAndTagIdでe->', e);
                                 }
-                            } catch (e) {
-                                console.error('insertTagでe発生->', e);
+                            } else {
+                                console.error('newTodoかnewTodo.idがfalsyだ!');
                             }
-                        });
+                        })
                     }
                 } catch (e) {
                     toast.error('handleCreateTodoAndTagsでエラー!');
