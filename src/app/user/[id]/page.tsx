@@ -1,5 +1,3 @@
-// 俺
-
 "use client";
 
 import { Todo } from "@/types";
@@ -10,6 +8,7 @@ import deleteTodo from "@/supabase/CRUD/deleteTodo";
 import { useEffect, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { createClient } from "@/supabase/client";
+import { ClipLoader } from "react-spinners";
 
 const UserTodos = ({ params }: { params: { id: string } }) => {
     const userId = params.id;  // ただurlに入力されている文字列(信頼性低いが即取得可)
@@ -148,17 +147,13 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
         <>
             <Toaster />
 
-            {isLoading ? (
-                <>
-                    <h2 style={{color: 'green'}}>Loading...</h2>
-                    <h1>Welcome, <b style={{color: 'blue'}}>{email}</b></h1>
-                </>
-            ) : (
-                <h1>Welcome, <b style={{color: 'blue'}}>{email}</b></h1>
-            )}
+            <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
+
+            <h1>Welcome, <b style={{color: 'blue'}}>{email}</b></h1>
+            <hr />
 
             <h2>あなたのTodo一覧</h2>
-            {todos && todos.map((todo, index) => (
+            {todos.map((todo, index) => (
                 <ul key={index}>
                     <li>{todo.content}</li>
                     <p className={todo.id ? '' : 'text-red-500'}>
