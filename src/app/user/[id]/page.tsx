@@ -29,7 +29,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
         setIsLoading(true);
     
         const initialization = async () => {
-            // Userを取得
+            /* Userを取得 */
             try {
                 setIsLoading(true);
                 const { data: { user } } = await supabase.auth.getUser();
@@ -49,7 +49,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                 console.error('getUserで発生したeー->', e);
             }
 
-            // Userのtodo一覧を取得
+            /* Userのtodo一覧を取得 */
             try {
                 const userTodos = await selectUserTodos(userId);
                 if (userTodos) {
@@ -73,6 +73,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
         if (userId === sessionUserId) {
             if (content) {
                 try {
+                    /* todo登録処理 */
                     const newTodo = await insertTodo(userId, content);
                     if (newTodo) {
                         setTodos(prev => [ ...prev, { id: newTodo.id, user_id: userId, content } ])
@@ -81,33 +82,9 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                         toast.error('登録失敗!');
                     }
 
-                    // if (tags.length >= 1) {  // tagが1つ以上登録された場合
-                    //     tags.map(async (tag) => {
-                    //         try {
-                    //             const newTagId = await insertTag(tag);
-                    //             if (newTodo && newTodo.id && newTagId) {
-                    //                 try {
-                    //                     const isSuccess = await insertTodoIdAndTagId(newTodo.id, newTagId);
-                    //                     if (isSuccess) {
-                    //                         toast.success('登録成功!');
-                    //                         setTags([]);
-                    //                     } else {
-                    //                         console.error('insertTodoIdAndTagIdの実行結果がfalsyです');
-                    //                     }
-                    //                 } catch (e) {
-                    //                     console.error('insertTodoIdAndTagIdでe発生->', e);
-                    //                 }
-                    //             } else {
-                    //                 console.error('newTodo, newTodo.id, newTagIdのどれかがfalsyです');
-                    //             }
-                    //         } catch (e) {
-                    //             console.error('insertTagでe発生->', e);
-                    //         }
-                    //     });
-                    // }
-
+                    /* tag登録処理 */
                     if (tags.length >= 1) {  // tagが1つ以上登録された場合                    
-                        tags.map(async (tag) => {
+                        tags.map(async (tag, index) => {
                             if (newTodo && newTodo.id) {
                                 try {
                                     const tagId = await insertTodoIdAndTagId(newTodo.id);
@@ -115,8 +92,10 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                                         try {
                                             const isSuccess = await insertTag(tagId, tag);
                                             if (isSuccess) {
-                                                toast.success('登録完了!');
-                                                setTags([]);
+                                                if (index === tags.length - 1) {
+                                                    toast.success('登録完了!');
+                                                    setTags([]);
+                                                }
                                             } else {
                                                 console.error('insertTagの結果がfalsyだ!');
                                             }
