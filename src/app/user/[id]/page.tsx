@@ -5,10 +5,14 @@ import selectUserTodos from "@/supabase/CRUD/selectTodos";
 import insertTodo from "@/supabase/CRUD/insertTodo";
 import updateTodo from "@/supabase/CRUD/updateTodo";
 import deleteTodo from "@/supabase/CRUD/deleteTodo";
+import insertTag from "@/supabase/CRUD/insertTag";
+import insertTodoIdAndTagId from "@/supabase/CRUD/insertTodoIdAndTagId";
 import { useEffect, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { createClient } from "@/supabase/client";
 import { ClipLoader } from "react-spinners";
+import Link from "next/link";
+import { TagsInput } from "react-tag-input-component";
 
 const UserTodos = ({ params }: { params: { id: string } }) => {
     const userId = params.id;  // ただurlに入力されている文字列(信頼性低いが即取得可)
@@ -19,6 +23,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
     const [isLoading, setIsLoading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const supabase = createClient();
+    const [tags, setTags] = useState<string[]>([]);
 
     useEffect(() => {
         setIsLoading(true);
@@ -61,7 +66,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
         initialization();
     }, []);
 
-    const handleCreateTodo = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleCreateTodoAndTags = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
 
@@ -70,19 +75,42 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                 try {
                     const newTodo = await insertTodo(userId, content);
                     if (newTodo) {
-                        toast.success('登録完了!');
                         setTodos(prev => [ ...prev, { id: newTodo.id, user_id: userId, content } ])
                         setContent('');
                     } else {
                         toast.error('登録失敗!');
                     }
 
-                    inputRef.current?.focus();
+                    if (tags.length >= 1) {  // tagが1つ以上登録された場合
+                        tags.map(async (tag) => {
+                            try {
+                                const newTagId = await insertTag(tag);
+                                if (newTodo && newTodo.id && newTagId) {
+                                    try {
+                                        const isSuccess = await insertTodoIdAndTagId(newTodo.id, newTagId);
+                                        if (isSuccess) {
+                                            toast.success('登録成功!');
+                                            setTags([]);
+                                        } else {
+                                            console.error('insertTodoIdAndTagIdの実行結果がfalsyです');
+                                        }
+                                    } catch (e) {
+                                        console.error('insertTodoIdAndTagIdでe発生->', e);
+                                    }
+                                } else {
+                                    console.error('newTodo, newTodo.id, newTagIdのどれかがfalsyです');
+                                }
+                            } catch (e) {
+                                console.error('insertTagでe発生->', e);
+                            }
+                        });
+                    }
                 } catch (e) {
-                    toast.error('insertTodoでエラー!');
-                    console.error('insertTodoでe発生->', e);
+                    toast.error('handleCreateTodoAndTagsでエラー!');
+                    console.error('handleCreateTodoAndTagsでe発生->', e);
                 } finally {
                     setIsLoading(false);
+                    inputRef.current?.focus();
                 }
             }
         } else {
@@ -156,8 +184,9 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             {todos.map((todo, index) => (
                 <ul key={index}>
                     <li>{todo.content}</li>
-                    <button onClick={() => handleUpdateTodo(todo.id!, todo.content)}>編集</button>
-                    <button onClick={() => handleDeleteTodo(todo.id!)}>削除</button>
+                    <button onClick={() => handleUpdateTodo(todo.id!, todo.content)}>編集</button>&nbsp;
+                    <button onClick={() => handleDeleteTodo(todo.id!)}>削除</button>&nbsp;
+                    <Link href={`/tags/${todo.id}`}>タグ</Link>
                 </ul>
             ))}
 
@@ -166,7 +195,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             <br />
 
             <h1>Todoを追加</h1>
-            <form onSubmit={handleCreateTodo}>
+            <form onSubmit={handleCreateTodoAndTags}>
                 <input
                     type="text"
                     placeholder="Todoを入力"
@@ -175,8 +204,15 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                     ref={inputRef}
                     required
                 />
+                <TagsInput
+                    value={tags}
+                    placeHolder="タグを入力してEnter(任意/複数入力可)"
+                    onChange={setTags}
+                />
                 <button type="submit" disabled={isLoading}>追加</button>
             </form>
+
+            <pre>{JSON.stringify(tags)}</pre>
         </>
     );
 };

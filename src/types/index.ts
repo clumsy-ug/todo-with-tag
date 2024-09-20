@@ -17,6 +17,6 @@ export interface Tag {
 }
 
 export interface Todo_Tag {
-    todo_id?: string,
-    tag_id?: string
+    todo_id: string,
+    tag_id: string
 }
