@@ -7,7 +7,7 @@ import selectUserTodos from "@/supabase/CRUD/selectTodos";
 import insertTodo from "@/supabase/CRUD/insertTodo";
 import updateTodo from "@/supabase/CRUD/updateTodo";
 import deleteTodo from "@/supabase/CRUD/deleteTodo";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { createClient } from "@/supabase/client";
 
@@ -18,6 +18,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [email, setEmail] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
     const supabase = createClient();
 
     useEffect(() => {
@@ -76,6 +77,8 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                     } else {
                         toast.error('登録失敗!');
                     }
+
+                    inputRef.current?.focus();
                 } catch (e) {
                     toast.error('insertTodoでエラー!');
                     console.error('insertTodoでe発生->', e);
@@ -177,6 +180,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                     placeholder="Todoを入力"
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
+                    ref={inputRef}
                     required
                 />
                 <button type="submit" disabled={isLoading}>追加</button>
