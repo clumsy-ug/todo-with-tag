@@ -156,9 +156,6 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             {todos.map((todo, index) => (
                 <ul key={index}>
                     <li>{todo.content}</li>
-                    <p className={todo.id ? '' : 'text-red-500'}>
-                        id: {todo.id || 'DBからidを取得するためにページをリロードしてください'}
-                    </p>
                     <button onClick={() => handleUpdateTodo(todo.id!, todo.content)}>編集</button>
                     <button onClick={() => handleDeleteTodo(todo.id!)}>削除</button>
                 </ul>
