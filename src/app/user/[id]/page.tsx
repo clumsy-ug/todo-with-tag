@@ -240,8 +240,6 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                 />
                 <button type="submit" disabled={isLoading}>追加</button>
             </form>
-
-            <pre>{JSON.stringify(tags)}</pre>
         </>
     );
 };
