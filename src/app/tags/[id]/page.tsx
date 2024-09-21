@@ -1,23 +1,66 @@
-/*
-todos_tagsテーブルからtodoIdが一致するデータのtag_idを全て返す
-（もしtagが登録されていないtodoだった場合、つまりtag_idではなくnullが返ってきた場合、画面に「この
-todoにはタグが登録されていません」と表示）
-->tagsテーブルからそのtag_idと一致するデータのnameを全て画面表示する
-*/
+'use client';
 
 import selectTagIds from "@/supabase/CRUD/selectTagIds";
+import selectTagName from "@/supabase/CRUD/selectTagName";
+import { useEffect, useState } from "react";
+import { ClipLoader } from "react-spinners";
 
-const TodoTags = async ({ params }: { params: { id: string } }) => {
+const TodoTags = ({ params }: { params: { id: string } }) => {
     const todoId = params.id;
-    try {
-        const ids = await selectTagIds(todoId);
-        console.log(ids);
-    } catch (e) {
-        console.error('TodoTags内でe->', e);
-    }
+    const [tagnames, setTagnames] = useState<Set<string>>(new Set());
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        setIsLoading(true);
+
+        const initialization = async () => {
+            try {
+                const ids = await selectTagIds(todoId);
+
+                if (ids && ids.length >= 1) {
+                    const newTagnames = new Set<string>();
+
+                    for (const tagIdObj of ids) {
+                        const tagId = tagIdObj.tag_id;
+                        try {
+                            const tagName = await selectTagName(tagId);
+                            if (tagName) {
+                                newTagnames.add(tagName);
+                            } else {
+                                console.error('tagNameがfalsyだ!');
+                            }
+                        } catch (e) {
+                            console.error('selectTagNameでe->', e);
+                        }
+                    }
+                    setTagnames(newTagnames);
+                }
+            } catch (e) {
+                console.error('selectTagIdsでe->', e);
+            } finally {
+                setIsLoading(false);
+            }
+        }   
+        initialization();
+    }, []);
 
     return (
-        <p>todoのidは: {todoId}</p>
+        <>
+            <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
+
+            {tagnames.size === 0 ? (
+                <p>このtodoにtagは登録されていません</p>
+            ) : (
+                <>
+                    <h1>tag一覧</h1>
+                    {Array.from(tagnames).map((tagname, index) => (
+                        <ul key={index}>
+                            <li>{tagname}</li>
+                        </ul>
+                    ))}
+                </>
+            )}
+        </>
     )
 }
 
