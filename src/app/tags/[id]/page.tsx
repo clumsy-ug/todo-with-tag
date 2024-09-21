@@ -22,7 +22,10 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                     try {
                         const tagNamesObj = await selectTagNames(tagIds);
                         const tagNames = tagNamesObj!.map(tagNameObj => tagNameObj.name);
-                        if (tagNames) setTagNamesState(tagNames);
+                        if (tagNames) {
+                            tagNames.sort();  // リロードすると並び順が毎回変わり得るという問題を防ぐ
+                            setTagNamesState(tagNames);
+                        }
                     } catch (e) {
                         console.error('selectTagNamesでe->', e);
                     }
