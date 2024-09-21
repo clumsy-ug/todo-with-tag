@@ -8,3 +8,7 @@ export interface Todo {
 export interface TagId {
     tag_id: string
 }
+
+export interface TagName {
+    name: string
+}

@@ -1,13 +1,13 @@
 'use client';
 
 import selectTagIds from "@/supabase/CRUD/selectTagIds";
-import selectTagName from "@/supabase/CRUD/selectTagName";
+import selectTagNames from "@/supabase/CRUD/selectTagName";
 import { useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
 
 const TodoTags = ({ params }: { params: { id: string } }) => {
     const todoId = params.id;
-    const [tagnames, setTagnames] = useState<Set<string>>(new Set());
+    const [tagNamesState, setTagNamesState] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -15,25 +15,17 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
 
         const initialization = async () => {
             try {
-                const ids = await selectTagIds(todoId);
+                const tagIdsObj = await selectTagIds(todoId);
 
-                if (ids && ids.length >= 1) {
-                    const newTagnames = new Set<string>();
-
-                    for (const tagIdObj of ids) {
-                        const tagId = tagIdObj.tag_id;
-                        try {
-                            const tagName = await selectTagName(tagId);
-                            if (tagName) {
-                                newTagnames.add(tagName);
-                            } else {
-                                console.error('tagNameがfalsyだ!');
-                            }
-                        } catch (e) {
-                            console.error('selectTagNameでe->', e);
-                        }
+                if (tagIdsObj && tagIdsObj.length >= 1) {
+                    const tagIds = tagIdsObj.map(tagIdObj => tagIdObj.tag_id);
+                    try {
+                        const tagNamesObj = await selectTagNames(tagIds);
+                        const tagNames = tagNamesObj!.map(tagNameObj => tagNameObj.name);
+                        if (tagNames) setTagNamesState(tagNames);
+                    } catch (e) {
+                        console.error('selectTagNamesでe->', e);
                     }
-                    setTagnames(newTagnames);
                 }
             } catch (e) {
                 console.error('selectTagIdsでe->', e);
@@ -48,14 +40,14 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
         <>
             <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
 
-            {tagnames.size === 0 ? (
+            {tagNamesState.length === 0 ? (
                 <p>このtodoにtagは登録されていません</p>
             ) : (
                 <>
                     <h1>tag一覧</h1>
-                    {Array.from(tagnames).map((tagname, index) => (
+                    {tagNamesState.map((tagName, index) => (
                         <ul key={index}>
-                            <li>{tagname}</li>
+                            <li>{tagName}</li>
                         </ul>
                     ))}
                 </>
