@@ -24,11 +24,6 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                     const tagIds = tagIdsObj.map(tagIdObj => tagIdObj.tag_id);
                     try {
                         const tagNamesObj = await selectTags(tagIds);
-
-                        /* idが数字であればsort内で減算(a.id - b.id)したものを返すだけで良いのだが、
-                        idは数字と英語の混合文字列なのでsortのみではなくlocaleCompareを使用することでより短く・正確に比較可能に。
-                        更に、localeCompare内の引数でnumericも設定することで、単純なUnicode値で比較したときに
-                        発生してしまう 10 < 2 のような状態になってしまうことを防げる */
                         tagNamesObj?.sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }));
                         if (tagNamesObj) setTags(tagNamesObj);
                     } catch (e) {
