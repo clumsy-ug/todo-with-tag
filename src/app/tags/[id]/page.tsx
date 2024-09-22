@@ -3,6 +3,7 @@
 import selectTagIds from "@/supabase/CRUD/selectTagIds";
 import selectTags from "@/supabase/CRUD/selectTags";
 import deleteTag from "@/supabase/CRUD/deleteTag";
+import updateTag from "@/supabase/CRUD/updateTag";
 import { Tag } from "@/types";
 import { useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
@@ -39,7 +40,40 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
         initialization();
     }, []);
 
+    const handleUpdateTag = async (tagId: string, currentName: string) => {
+        const newName = prompt('新しいタグ名を入力してください', currentName);
+        if (!newName) {
+            toast.error('空欄で登録はできません!');
+            return;
+        }
+        if (newName === currentName) {
+            toast.error('変更されていません!');
+            return;
+        }
+
+        setIsLoading(true);
+
+        try {
+            const isSuccess = await updateTag(tagId, newName);
+            if (isSuccess) {
+                toast.success('編集成功!');
+                setTags(prev => prev.map(tagObj => 
+                    tagObj.id === tagId ? { ...tagObj, name: newName } : tagObj
+                ));
+            } else {
+                toast.error('編集失敗!')
+                console.error('updateTagの返り値がfalsyだ!');
+            }
+        } catch (e) {
+            console.error('handleUpdateTag内のe->', e);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     const handleDeleteTag = async (tagId: string) => {
+        setIsLoading(true);
+
         try {
             const deletedTagId = await deleteTag(tagId);
             if (deletedTagId) {
@@ -51,6 +85,8 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
             }
         } catch (e) {
             console.error('handleDeleteTag内のe->', e);
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -69,6 +105,7 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                         <ul key={index}>
                             <li>{tag.name}</li>
                             <button onClick={() => handleDeleteTag(tag.id)}>削除</button>
+                            <button onClick={() => handleUpdateTag(tag.id, tag.name)}>編集</button>
                         </ul>
                     ))}
                 </>
