@@ -5,11 +5,13 @@ import { ClipLoader } from "react-spinners";
 import toast, { Toaster } from "react-hot-toast";
 import { createClient } from "@/supabase/client";
 import Link from "next/link";
+import { Tag } from "@/types";
 import selectTagIds from "@/supabase/CRUD/selectTagIds";
 import selectTags from "@/supabase/CRUD/selectTags";
 import deleteTag from "@/supabase/CRUD/deleteTag";
 import updateTag from "@/supabase/CRUD/updateTag";
-import { Tag } from "@/types";
+import insertTodoIdAndTagId from "@/supabase/CRUD/insertTodoIdAndTagId";
+import insertTag from "@/supabase/CRUD/insertTag";
 
 const TodoTags = ({ params }: { params: { id: string } }) => {
     const todoId = params.id;
@@ -17,6 +19,7 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
     const [tags, setTags] = useState<Tag[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [userId, setUserId] = useState<string>('');
+    const [newTagName, setNewTagName] = useState<string>('');
 
     useEffect(() => {
         setIsLoading(true);
@@ -56,6 +59,36 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
         }   
         initialization();
     }, []);
+
+    const handleCreateTag = async (e: React.FormEvent<HTMLElement>) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        try {
+            const generatedTagId = await insertTodoIdAndTagId(todoId);
+            if (generatedTagId) {
+                try {
+                    const isSuccess = await insertTag(generatedTagId, newTagName);
+                    if (isSuccess) {
+                        toast.success('登録完了!');
+                        // sortも同時にしたい
+                        setTags(prev => [ ...prev, { id: generatedTagId, name: newTagName } ]);
+                        setNewTagName('');
+                    } else {
+                        toast.error('登録失敗!');
+                    }
+                } catch (e) {
+                    console.error('insertTagでe->', e);
+                }
+            } else {
+                console.error('insertTodoIdAndTagIdの返り値がfalsyだ!');
+            }
+        } catch (e) {
+            console.error('handleCreateTag内のe->', e);
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     const handleUpdateTag = async (tagId: string, currentName: string) => {
         const newName = prompt('新しいタグ名を入力してください', currentName);
@@ -129,6 +162,20 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                     ))}
                 </>
             )}
+
+            <hr />
+
+            <h1>tagを追加</h1>
+            <form onSubmit={handleCreateTag}>
+                <input
+                    type="text"
+                    placeholder="tag名を入力"
+                    value={newTagName}
+                    onChange={(e) => setNewTagName(e.target.value)}
+                    required
+                />
+                <button type="submit">登録</button>
+            </form>
         </>
     )
 }
