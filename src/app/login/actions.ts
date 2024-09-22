@@ -24,8 +24,8 @@ export async function login(formData: FormData) {
         redirect("/error");
     }
 
-    revalidatePath(`/user/${userId}`, "layout");
-    redirect(`/user/${userId}`);
+    revalidatePath(`/todos/${userId}`, "layout");
+    redirect(`/todos/${userId}`);
 }
 
 export async function signup(formData: FormData) {
@@ -47,8 +47,8 @@ export async function signup(formData: FormData) {
         redirect("/error");
     }
 
-    revalidatePath(`/user/${userId}`, "layout");
-    redirect(`/user/${userId}`);
+    revalidatePath(`/todos/${userId}`, "layout");
+    redirect(`/todos/${userId}`);
 }
 
 export async function signout() {

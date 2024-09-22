@@ -20,7 +20,7 @@ const LoginPage = async () => {
         console.error("LoginPage内のエラー->", e);
     }
 
-    if (globalSession) redirect(`user/${userId}`);
+    if (globalSession) redirect(`todos/${userId}`);
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
