@@ -77,10 +77,14 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                     /* todo登録処理 */
                     const newTodo = await insertTodo(userId, content);
                     if (newTodo) {
-                        const newTodos = await selectTodos(userId);
-                        if (newTodos) {
-                            newTodos.sort((a, b) => a.content.localeCompare(b.content, undefined, { numeric: true }));
-                            setTodos(newTodos);
+                        try {
+                            const newTodos = await selectTodos(userId);
+                            if (newTodos) {
+                                newTodos.sort((a, b) => a.content.localeCompare(b.content, undefined, { numeric: true }));
+                                setTodos(newTodos);
+                            }
+                        } catch (e) {
+                            console.error('handleCreateTodoAndTags内のselectTodosでe->', e);
                         }
                         setContent('');
                     } else {
@@ -146,9 +150,20 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
         setIsLoading(true);
 
         try {
-            const isSuccess = await updateTodo(todoId, newContent!);
+            const isSuccess = await updateTodo(todoId, newContent);
             if (isSuccess) {
                 toast.success('編集完了!');
+                try {
+                    const newTodos = await selectTodos(userId);
+                    if (newTodos) {
+                        newTodos.sort((a, b) => a.content.localeCompare(b.content, undefined, { numeric: true }));
+                        setTodos(newTodos);
+                    } else {
+                        console.error('selectTodosの返り値がfalsyだ!');
+                    }
+                } catch (e) {
+                    console.error('handleUpdateTodo内のselectTodosのe->', e);
+                }
                 setTodos(prev => prev.map(todo => 
                     todo.id === todoId ? { ...todo, content: newContent } : todo
                 ));
