@@ -11,7 +11,7 @@ const insertTag = async (id: string, name: string): Promise<boolean> => {
     const supabase = createClient();
 
     try {
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from('tags')
             .insert({ id, name })
             .select();
