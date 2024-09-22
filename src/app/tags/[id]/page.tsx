@@ -70,27 +70,11 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                 try {
                     const isSuccess = await insertTag(generatedTagId, newTagName);
                     if (isSuccess) {
-                        try {
-                            const tagIdsObj = await selectTagIds(todoId);
-                            if (tagIdsObj && tagIdsObj.length >= 1) {
-                                const tagIds = tagIdsObj.map(tagIdObj => tagIdObj.tag_id);
-                                try {
-                                    const tagsObj = await selectTags(tagIds);
-                                    if (tagsObj) {
-                                        toast.success('登録完了!')
-                                        tagsObj.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
-                                        setTags(tagsObj);
-                                        setNewTagName('');
-                                    } else {
-                                        console.error('selectTagsでfalsyな値が返ってきました!');
-                                    }
-                                } catch (e) {
-                                    console.error('selectTagsでe->', e);
-                                }
-                            }
-                        } catch (e) {
-                            console.error('handleCreateTag内のselectTagIdsでe->', e);
-                        }
+                        toast.success('登録完了!');
+                        setTags(prev => [ ...prev, { id: generatedTagId, name: newTagName } ]
+                            .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+                        );
+                        setNewTagName('');
                     } else {
                         toast.error('登録失敗!');
                         console.error('insertTagの返り値がfalsyだ!');
@@ -127,7 +111,9 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                 toast.success('編集成功!');
                 setTags(prev => prev.map(tagObj => 
                     tagObj.id === tagId ? { ...tagObj, name: newName } : tagObj
-                ));
+                )
+                    .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+                );
             } else {
                 toast.error('編集失敗!')
                 console.error('updateTagの返り値がfalsyだ!');
