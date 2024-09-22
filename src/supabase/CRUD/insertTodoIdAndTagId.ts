@@ -1,5 +1,3 @@
-// tagidを返したい
-
 import { createClient } from "../client";
 
 const insertTodoIdAndTagId = async (todoId: string): Promise<string | null> => {

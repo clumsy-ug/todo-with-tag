@@ -6,8 +6,7 @@ const insertTag = async (id: string, name: string): Promise<boolean> => {
     try {
         const { error } = await supabase
             .from('tags')
-            .insert({ id, name })
-            .select();
+            .insert({ id, name });
 
         if (error) {
             console.error('insertTag内のerror->', error);

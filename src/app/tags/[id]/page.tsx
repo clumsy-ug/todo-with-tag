@@ -40,15 +40,15 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                 if (tagIdsObj && tagIdsObj.length >= 1) {
                     const tagIds = tagIdsObj.map(tagIdObj => tagIdObj.tag_id);
                     try {
-                        const tagNamesObj = await selectTags(tagIds);
-                        if (tagNamesObj) {
-                            tagNamesObj.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
-                            setTags(tagNamesObj);
+                        const tagsObj = await selectTags(tagIds);
+                        if (tagsObj) {
+                            tagsObj.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+                            setTags(tagsObj);
                         } else {
                             console.error('selectTagsでfalsyな値が返ってきました!');
                         }
                     } catch (e) {
-                        console.error('selectTagNamesでe->', e);
+                        console.error('selectTagsでe->', e);
                     }
                 }
             } catch (e) {
@@ -70,12 +70,30 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                 try {
                     const isSuccess = await insertTag(generatedTagId, newTagName);
                     if (isSuccess) {
-                        toast.success('登録完了!');
-                        // sortも同時にしたい
-                        setTags(prev => [ ...prev, { id: generatedTagId, name: newTagName } ]);
-                        setNewTagName('');
+                        try {
+                            const tagIdsObj = await selectTagIds(todoId);
+                            if (tagIdsObj && tagIdsObj.length >= 1) {
+                                const tagIds = tagIdsObj.map(tagIdObj => tagIdObj.tag_id);
+                                try {
+                                    const tagsObj = await selectTags(tagIds);
+                                    if (tagsObj) {
+                                        toast.success('登録完了!')
+                                        tagsObj.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+                                        setTags(tagsObj);
+                                        setNewTagName('');
+                                    } else {
+                                        console.error('selectTagsでfalsyな値が返ってきました!');
+                                    }
+                                } catch (e) {
+                                    console.error('selectTagsでe->', e);
+                                }
+                            }
+                        } catch (e) {
+                            console.error('handleCreateTag内のselectTagIdsでe->', e);
+                        }
                     } else {
                         toast.error('登録失敗!');
+                        console.error('insertTagの返り値がfalsyだ!');
                     }
                 } catch (e) {
                     console.error('insertTagでe->', e);
@@ -146,7 +164,7 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
             
             <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
 
-            <Link href={`/todos/${userId}`}>Todo一覧へ</Link>
+            <Link href={`/todos/${userId}`} scroll={false}>Todo一覧へ</Link>
 
             {tags.length === 0 ? (
                 <p>このtodoにtagは登録されていません</p>
