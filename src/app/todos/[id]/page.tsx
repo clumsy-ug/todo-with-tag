@@ -53,6 +53,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             try {
                 const userTodos = await selectUserTodos(userId);
                 if (userTodos) {
+                    userTodos.sort((a, b) => a.content.localeCompare(b.content, undefined, { numeric: true }))
                     setTodos(userTodos);
                 } else {
                     console.error('selectUserTodos()でfalsyな値が返ってきました');

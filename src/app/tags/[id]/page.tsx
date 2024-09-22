@@ -38,8 +38,12 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                     const tagIds = tagIdsObj.map(tagIdObj => tagIdObj.tag_id);
                     try {
                         const tagNamesObj = await selectTags(tagIds);
-                        tagNamesObj?.sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }));
-                        if (tagNamesObj) setTags(tagNamesObj);
+                        if (tagNamesObj) {
+                            tagNamesObj.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+                            setTags(tagNamesObj);
+                        } else {
+                            console.error('selectTagsでfalsyな値が返ってきました!');
+                        }
                     } catch (e) {
                         console.error('selectTagNamesでe->', e);
                     }
