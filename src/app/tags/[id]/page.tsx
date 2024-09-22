@@ -2,9 +2,11 @@
 
 import selectTagIds from "@/supabase/CRUD/selectTagIds";
 import selectTags from "@/supabase/CRUD/selectTags";
+import deleteTag from "@/supabase/CRUD/deleteTag";
 import { Tag } from "@/types";
 import { useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
+import toast, { Toaster } from "react-hot-toast";
 
 const TodoTags = ({ params }: { params: { id: string } }) => {
     const todoId = params.id;
@@ -42,12 +44,25 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
         initialization();
     }, []);
 
-    const handleUpdateTag = async (tagId: string) => {
-        console.log('tagIdは->', tagId);
+    const handleDeleteTag = async (tagId: string) => {
+        try {
+            const deletedTagId = await deleteTag(tagId);
+            if (deletedTagId) {
+                toast.success('削除成功!');
+                setTags(prev => prev.filter(tagObj => tagObj.id !== tagId));
+            } else {
+                toast.error('削除失敗!');
+                console.error('deleteTagの返り値がfalsyだ!');
+            }
+        } catch (e) {
+            console.error('handleDeleteTag内のe->', e);
+        }
     }
 
     return (
         <>
+            <Toaster />
+            
             <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
 
             {tags.length === 0 ? (
@@ -58,7 +73,7 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                     {tags.map((tag, index) => (
                         <ul key={index}>
                             <li>{tag.name}</li>
-                            <button onClick={() => handleUpdateTag(tag.id)}>編集</button>
+                            <button onClick={() => handleDeleteTag(tag.id)}>削除</button>
                         </ul>
                     ))}
                 </>
