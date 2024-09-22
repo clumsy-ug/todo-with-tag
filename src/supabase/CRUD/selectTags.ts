@@ -1,13 +1,13 @@
-import { TagName } from "@/types";
+import { Tag } from "@/types";
 import { createClient } from "../client";
 
-const selectTagNames = async (tagIds: string[]): Promise<TagName[] | null> => {
+const selectTags = async (tagIds: string[]): Promise<Tag[] | null> => {
     const supabase = createClient();
 
     try {
         const { data, error } = await supabase
             .from('tags')
-            .select('name')
+            .select()
             .in('id', tagIds);
 
         if (error) {
@@ -18,9 +18,9 @@ const selectTagNames = async (tagIds: string[]): Promise<TagName[] | null> => {
         return data;
         /* dataの型
         [
-            {name: 'aaa'},
-            {name: 'bbb'},
-            {name: 'ccc'}
+            {id: 'aaa', name: 'aaa'},
+            {id: 'bbb', name: 'bbb'},
+            {id: 'ccc', name: 'ccc'}
         ]
         */
     } catch (e) {
@@ -29,4 +29,4 @@ const selectTagNames = async (tagIds: string[]): Promise<TagName[] | null> => {
     }
 }
 
-export default selectTagNames;
+export default selectTags;

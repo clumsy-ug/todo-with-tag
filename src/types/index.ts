@@ -9,6 +9,7 @@ export interface TagId {
     tag_id: string
 }
 
-export interface TagName {
+export interface Tag {
+    id: string,
     name: string
 }
