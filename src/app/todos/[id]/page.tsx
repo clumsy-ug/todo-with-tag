@@ -192,8 +192,8 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             {todos.map((todo, index) => (
                 <ul key={index}>
                     <li>{todo.content}</li>
-                    <button onClick={() => handleUpdateTodo(todo.id!, todo.content)}>編集</button>&nbsp;
                     <button onClick={() => handleDeleteTodo(todo.id!)}>削除</button>&nbsp;
+                    <button onClick={() => handleUpdateTodo(todo.id!, todo.content)}>編集</button>&nbsp;
                     <Link href={`/tags/${todo.id}`}>タグ</Link>
                 </ul>
             ))}
