@@ -1,7 +1,7 @@
 "use client";
 
 import { Todo } from "@/types";
-import selectUserTodos from "@/supabase/CRUD/selectTodos";
+import selectTodos from "@/supabase/CRUD/selectTodos";
 import insertTodo from "@/supabase/CRUD/insertTodo";
 import updateTodo from "@/supabase/CRUD/updateTodo";
 import deleteTodo from "@/supabase/CRUD/deleteTodo";
@@ -51,9 +51,9 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
 
             /* Userのtodo一覧を取得 */
             try {
-                const userTodos = await selectUserTodos(userId);
+                const userTodos = await selectTodos(userId);
                 if (userTodos) {
-                    userTodos.sort((a, b) => a.content.localeCompare(b.content, undefined, { numeric: true }))
+                    userTodos.sort((a, b) => a.content.localeCompare(b.content, undefined, { numeric: true }));
                     setTodos(userTodos);
                 } else {
                     console.error('selectUserTodos()でfalsyな値が返ってきました');
@@ -77,10 +77,14 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                     /* todo登録処理 */
                     const newTodo = await insertTodo(userId, content);
                     if (newTodo) {
-                        setTodos(prev => [ ...prev, { id: newTodo.id, user_id: userId, content } ])
+                        const newTodos = await selectTodos(userId);
+                        if (newTodos) {
+                            newTodos.sort((a, b) => a.content.localeCompare(b.content, undefined, { numeric: true }));
+                            setTodos(newTodos);
+                        }
                         setContent('');
                     } else {
-                        toast.error('登録失敗!');
+                        toast.error('todo登録失敗!');
                     }
 
                     /* tag登録処理 */
