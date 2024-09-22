@@ -1,4 +1,4 @@
-import { createClient } from "../client";
+import { createClient } from "../../client";
 
 const updateTodo = async (todoId: string, content: string): Promise<boolean> => {
     const supabase = createClient();

@@ -1,12 +1,12 @@
 "use client";
 
 import { Todo } from "@/types";
-import selectTodos from "@/supabase/CRUD/selectTodos";
-import insertTodo from "@/supabase/CRUD/insertTodo";
-import updateTodo from "@/supabase/CRUD/updateTodo";
-import deleteTodo from "@/supabase/CRUD/deleteTodo";
-import insertTag from "@/supabase/CRUD/insertTag";
-import insertTodoIdAndTagId from "@/supabase/CRUD/insertTodoIdAndTagId";
+import selectTodos from "@/supabase/CRUD/todo/selectTodos";
+import insertTodo from "@/supabase/CRUD/todo/insertTodo";
+import updateTodo from "@/supabase/CRUD/todo/updateTodo";
+import deleteTodo from "@/supabase/CRUD/todo/deleteTodo";
+import insertTag from "@/supabase/CRUD/tag/insertTag";
+import insertTodoIdAndTagId from "@/supabase/CRUD/todo/insertTodoIdAndTagId";
 import { useEffect, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { createClient } from "@/supabase/client";

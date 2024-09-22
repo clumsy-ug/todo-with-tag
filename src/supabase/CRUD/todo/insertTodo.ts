@@ -1,5 +1,5 @@
 import { Todo } from "@/types";
-import { createClient } from "../client";
+import { createClient } from "../../client";
 
 const insertTodo = async (userId: string, content: string): Promise<Todo | null> => {
     const supabase = createClient();

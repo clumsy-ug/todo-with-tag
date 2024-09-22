@@ -1,4 +1,4 @@
-import { createClient } from "../client";
+import { createClient } from "../../client";
 
 const deleteTodo = async (todoId: string): Promise<boolean> => {
     const supabase = createClient();

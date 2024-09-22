@@ -1,4 +1,4 @@
-import { createClient } from "../client";
+import { createClient } from "../../client";
 
 const insertTag = async (id: string, name: string): Promise<boolean> => {
     const supabase = createClient();

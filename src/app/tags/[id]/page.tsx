@@ -6,12 +6,12 @@ import toast, { Toaster } from "react-hot-toast";
 import { createClient } from "@/supabase/client";
 import Link from "next/link";
 import { Tag } from "@/types";
-import selectTagIds from "@/supabase/CRUD/selectTagIds";
-import selectTags from "@/supabase/CRUD/selectTags";
-import deleteTag from "@/supabase/CRUD/deleteTag";
-import updateTag from "@/supabase/CRUD/updateTag";
-import insertTodoIdAndTagId from "@/supabase/CRUD/insertTodoIdAndTagId";
-import insertTag from "@/supabase/CRUD/insertTag";
+import selectTagIds from "@/supabase/CRUD/tag/selectTagIds";
+import selectTags from "@/supabase/CRUD/tag/selectTags";
+import deleteTag from "@/supabase/CRUD/tag/deleteTag";
+import updateTag from "@/supabase/CRUD/tag/updateTag";
+import insertTodoIdAndTagId from "@/supabase/CRUD/todo/insertTodoIdAndTagId";
+import insertTag from "@/supabase/CRUD/tag/insertTag";
 
 const TodoTags = ({ params }: { params: { id: string } }) => {
     const todoId = params.id;

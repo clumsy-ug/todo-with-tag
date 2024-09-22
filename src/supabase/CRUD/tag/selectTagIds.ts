@@ -1,5 +1,5 @@
 import { TagId } from "@/types";
-import { createClient } from "../client";
+import { createClient } from "../../client";
 
 const selectTagIds = async (todoId: string): Promise<TagId[] | null> => {
     const supabase = createClient();

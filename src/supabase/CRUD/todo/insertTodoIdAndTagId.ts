@@ -1,4 +1,4 @@
-import { createClient } from "../client";
+import { createClient } from "../../client";
 
 const insertTodoIdAndTagId = async (todoId: string): Promise<string | null> => {
     const supabase = createClient();

@@ -1,4 +1,4 @@
-import { createClient } from "../client";
+import { createClient } from "../../client";
 
 const deleteTag = async (tagId: string): Promise<string | null> => {
     const supabase = createClient();
