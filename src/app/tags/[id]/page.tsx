@@ -1,18 +1,22 @@
 'use client';
 
+import { useEffect, useState } from "react";
+import { ClipLoader } from "react-spinners";
+import toast, { Toaster } from "react-hot-toast";
+import { createClient } from "@/supabase/client";
+import Link from "next/link";
 import selectTagIds from "@/supabase/CRUD/selectTagIds";
 import selectTags from "@/supabase/CRUD/selectTags";
 import deleteTag from "@/supabase/CRUD/deleteTag";
 import updateTag from "@/supabase/CRUD/updateTag";
 import { Tag } from "@/types";
-import { useEffect, useState } from "react";
-import { ClipLoader } from "react-spinners";
-import toast, { Toaster } from "react-hot-toast";
 
 const TodoTags = ({ params }: { params: { id: string } }) => {
     const todoId = params.id;
+    const supabase = createClient();
     const [tags, setTags] = useState<Tag[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [userId, setUserId] = useState<string>('');
 
     useEffect(() => {
         setIsLoading(true);
@@ -20,6 +24,15 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
         const initialization = async () => {
             try {
                 const tagIdsObj = await selectTagIds(todoId);
+
+                try {
+                    const {data: { user }} = await supabase.auth.getUser();
+                    if (user && user.id) {
+                        setUserId(user.id);
+                    }
+                } catch (e) {
+                    console.error('getUserでe->', e);
+                }
 
                 if (tagIdsObj && tagIdsObj.length >= 1) {
                     const tagIds = tagIdsObj.map(tagIdObj => tagIdObj.tag_id);
@@ -95,6 +108,8 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
             <Toaster />
             
             <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
+
+            <Link href={`/todos/${userId}`}>Todo一覧へ</Link>
 
             {tags.length === 0 ? (
                 <p>このtodoにtagは登録されていません</p>
