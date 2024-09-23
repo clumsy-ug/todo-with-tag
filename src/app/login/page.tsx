@@ -1,6 +1,6 @@
 import '../globals.css';
 
-import { login, signup } from "./actions";
+import { login, signup, signout } from "./actions";
 import { createClient } from "@/supabase/server";
 import { Session } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
@@ -72,6 +72,13 @@ const LoginPage = async () => {
                     </button>
                 </div>
             </form>
+
+            <button
+                onClick={signout}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+                Sign out
+            </button>
         </div>
     );
 };
