@@ -7,7 +7,7 @@ import { createClient } from "@/supabase/client";
 import Link from "next/link";
 import { Tag } from "@/types";
 import selectTagIds from "@/supabase/CRUD/tag/selectTagIds";
-import selectTags from "@/supabase/CRUD/tag/selectTags";
+import { selectTagsByTagIds } from "@/supabase/CRUD/tag/selectTags";
 import deleteTag from "@/supabase/CRUD/tag/deleteTag";
 import updateTag from "@/supabase/CRUD/tag/updateTag";
 import insertTodoIdAndTagId from "@/supabase/CRUD/todo/insertTodoIdAndTagId";
@@ -40,7 +40,7 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                 if (tagIdsObj && tagIdsObj.length >= 1) {
                     const tagIds = tagIdsObj.map(tagIdObj => tagIdObj.tag_id);
                     try {
-                        const tagsObj = await selectTags(tagIds);
+                        const tagsObj = await selectTagsByTagIds(tagIds);
                         if (tagsObj) {
                             tagsObj.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
                             setTags(tagsObj);

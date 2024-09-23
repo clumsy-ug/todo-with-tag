@@ -1,7 +1,10 @@
 "use client";
 
 import { Todo } from "@/types";
-import selectTodos from "@/supabase/CRUD/todo/selectTodos";
+import { selectTodosByUserId } from "@/supabase/CRUD/todo/selectTodos";
+import selectTodoIds from "@/supabase/CRUD/todo/selectTodoIds";
+import { selectTodosByTodoIds } from "@/supabase/CRUD/todo/selectTodos";
+import { selectTagIdsBySearchTag } from "@/supabase/CRUD/tag/selectTags";
 import insertTodo from "@/supabase/CRUD/todo/insertTodo";
 import updateTodo from "@/supabase/CRUD/todo/updateTodo";
 import deleteTodo from "@/supabase/CRUD/todo/deleteTodo";
@@ -51,15 +54,15 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
 
             /* Userのtodo一覧を取得 */
             try {
-                const userTodos = await selectTodos(userId);
+                const userTodos = await selectTodosByUserId(userId);
                 if (userTodos) {
                     userTodos.sort((a, b) => a.content.localeCompare(b.content, undefined, { numeric: true }));
                     setTodos(userTodos);
                 } else {
-                    console.error('selectUserTodos()でfalsyな値が返ってきました');
+                    console.error('selectTodosByUserIdでfalsyな値が返ってきました');
                 }
             } catch (e) {
-                console.error('selectUserTodosで発生したe->', e);
+                console.error('selectTodosByUserIdで発生したe->', e);
             } finally {
                 setIsLoading(false);
             }
@@ -78,13 +81,13 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                     const newTodo = await insertTodo(userId, content);
                     if (newTodo) {
                         try {
-                            const newTodos = await selectTodos(userId);
+                            const newTodos = await selectTodosByUserId(userId);
                             if (newTodos) {
                                 newTodos.sort((a, b) => a.content.localeCompare(b.content, undefined, { numeric: true }));
                                 setTodos(newTodos);
                             }
                         } catch (e) {
-                            console.error('handleCreateTodoAndTags内のselectTodosでe->', e);
+                            console.error('handleCreateTodoAndTags内のselectTodosByUserIdでe->', e);
                         }
                         setContent('');
                     } else {
@@ -154,12 +157,12 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             if (isSuccess) {
                 toast.success('編集完了!');
                 try {
-                    const newTodos = await selectTodos(userId);
+                    const newTodos = await selectTodosByUserId(userId);
                     if (newTodos) {
                         newTodos.sort((a, b) => a.content.localeCompare(b.content, undefined, { numeric: true }));
                         setTodos(newTodos);
                     } else {
-                        console.error('selectTodosの返り値がfalsyだ!');
+                        console.error('selectTodosByUserIdの返り値がfalsyだ!');
                     }
                 } catch (e) {
                     console.error('handleUpdateTodo内のselectTodosのe->', e);
@@ -199,6 +202,63 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
         }
     }
 
+    const handleSearchTag = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        setIsLoading(true);
+
+        // input要素のvalueではなくe.target.valueにしないと最新情報が取れない
+        if (e.target.value === '') {
+            try {
+                const userTodos = await selectTodosByUserId(userId);
+                if (userTodos) {
+                    userTodos.sort((a, b) => a.content.localeCompare(b.content, undefined, { numeric: true }));
+                    setTodos(userTodos);
+                } else {
+                    console.error('handleSearchTag内のselectTodosByUserIdでfalsyな値が返ってきました');
+                }
+            } catch (e) {
+                console.error('handleSearchTag内のselectTodosByUserIdで発生したe->', e);
+            } finally {
+                setIsLoading(false)
+            }
+            return;
+        }
+
+        // 最終的にtodos.idを持ってこれれば良い。それを使ってsetTodosするので。
+        // 1文字変えるだけで3回リクエスト & 1回更新 が走るが、仕方ない（改善したい場合は恐らくテーブル構造を変えるしかない）
+        try {
+            const filteredTagIdsRow = await selectTagIdsBySearchTag(e.target.value);
+            const filteredTagIds = filteredTagIdsRow?.map(tagIdObj => tagIdObj.id);
+            if (filteredTagIds) {
+                try {
+                    const filteredTodoIdsRow = await selectTodoIds(filteredTagIds);
+                    const filteredTodoIds = filteredTodoIdsRow?.map(todoIdObj => todoIdObj.todo_id);
+                    if (filteredTodoIds) {
+                        try {
+                            const filteredTodos = await selectTodosByTodoIds(filteredTodoIds);
+                            if (filteredTodos) {
+                                filteredTodos.sort((a, b) => a.content.localeCompare(b.content, undefined, { numeric: true }));
+                                setTodos(filteredTodos);
+                            } else {
+                                console.error('handleSearchTag内のselectTodosByTodoIdsの返り値がfalsyだ!');
+                            }
+                        } catch (e) {
+                            console.error('handleSearchTag内のselectTodosByTodoIdsでe->', e);
+                        }
+                    } else {
+                        console.error('selectTodoIdsの返り値がfalsyだ!');
+                    }
+                } catch (e) {
+                    console.error('handleSearchTag内のselectTodoIdsでe->', e);
+                }
+            }
+        } catch (e) {
+            console.error('handleSarchTag内のe->', e);
+        } finally {
+            setIsLoading(false);
+        }
+
+    }
+
     return (
         <>
             <Toaster />
@@ -206,6 +266,14 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
 
             <h1>Welcome, <b style={{color: 'blue'}}>{email}</b></h1>
+
+            <h2>tagで絞り込み検索</h2>
+            <input
+                type="text"
+                placeholder="検索したいtagを入力"
+                onChange={e => handleSearchTag(e)}
+            />
+
             <hr />
 
             <h2>あなたのTodo一覧</h2>
@@ -234,7 +302,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                 />
                 <TagsInput
                     value={tags}
-                    placeHolder="タグを入力してEnter(任意/複数入力可)"
+                    placeHolder="tagを入力してEnter(任意/複数入力可)"
                     onChange={setTags}
                 />
                 <button type="submit" disabled={isLoading}>追加</button>
