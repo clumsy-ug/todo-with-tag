@@ -23,8 +23,12 @@ export async function login(formData: FormData) {
         redirect("/error");
     }
 
-    revalidatePath(`/todos/${userId}`, "layout");
-    redirect(`/todos/${userId}`);
+    if (userId) {
+        revalidatePath(`/todos/${userId}`, "layout");
+        redirect(`/todos/${userId}`);
+    } else {
+        redirect("/error");
+    }
 }
 
 export async function signup(formData: FormData) {
