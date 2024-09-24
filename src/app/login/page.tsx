@@ -4,12 +4,15 @@ import { login, signup, signout } from "./actions";
 import { createClient } from "@/supabase/server";
 import { Session } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
+import selectUser from '@/supabase/CRUD/user/selectUser';
+import insertUser from '@/supabase/CRUD/user/insertUser';
 
 const LoginPage = async () => {
     const supabase = createClient();
 
     const { data: { user } } = await supabase.auth.getUser();
     const userId = user?.id;
+    const userEmail = user?.email;
 
     let globalSession: Session | null = null;
 
@@ -20,7 +23,24 @@ const LoginPage = async () => {
         console.error("LoginPage内のgetSessionのe->", e);
     }
 
-    if (globalSession) redirect(`todos/${userId}`);
+    if (globalSession) {
+        if (userId && userEmail) {
+            try {
+                const isUserExist = await selectUser(userId);
+                if (!isUserExist) {
+                    try {
+                        const isSuccess = await insertUser(userId, userEmail);
+                        if (!isSuccess) console.error('insertUserの返り値がfalsyだ!');
+                    } catch (e) {
+                        console.error('LoginPage内のinsertUserでe->', e);
+                    }
+                }
+            } catch (e) {
+                console.error('LoginPage内のselectUserでe->', e);
+            }
+        }
+        redirect(`todos/${userId}`);
+    }
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
