@@ -31,9 +31,6 @@ export async function login(formData: FormData) {
 export async function signup(formData: FormData) {
     const supabase = createClient();
 
-    const { data: { user } } = await supabase.auth.getUser();
-    const userId = user?.id;
-
     // type-casting here for convenience
     // in practice, you should validate your inputs
     const data = {
@@ -47,8 +44,8 @@ export async function signup(formData: FormData) {
         redirect("/error");
     }
 
-    revalidatePath(`/todos/${userId}`, "layout");
-    redirect(`/todos/${userId}`);
+    revalidatePath('/signup-pending', "layout");
+    redirect('/signup-pending');
 }
 
 export async function signout() {
