@@ -10,7 +10,7 @@ const ErrorPage = () => {
                 <Link
                     href="/login"
                     scroll={false}
-                    className="text-blue-600 hover:text-blue-800 underline"
+                    className="text-blue-600 underline hover:text-blue-800"
                 >
                     ログインページへ
                 </Link>
