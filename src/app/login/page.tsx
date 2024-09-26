@@ -1,5 +1,3 @@
-import '../globals.css';
-
 import { login, signup } from "./actions";
 import { createClient } from "@/supabase/server";
 import { Session } from "@supabase/supabase-js";
