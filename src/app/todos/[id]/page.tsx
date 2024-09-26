@@ -265,6 +265,15 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
 
             <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
 
+            <form action="/auth/signout" method="post">
+                <button
+                    type="submit"
+                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded duration-300 hover:scale-110"
+                >
+                    Sign out
+                </button>
+            </form>
+
             <Link href='/' scroll={false}>ホーム</Link><br />
 
             <h1>Welcome, <b style={{color: 'blue'}}>{email}</b></h1>
@@ -288,9 +297,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                 </ul>
             ))}
 
-            <br />
-            <hr />
-            <br />
+            <br /><hr /><br />
 
             <h1>Todoを追加</h1>
             <form onSubmit={handleCreateTodoAndTags}>
