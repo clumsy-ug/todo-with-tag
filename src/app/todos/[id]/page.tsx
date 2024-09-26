@@ -260,47 +260,73 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
     }
 
     return (
-        <>
+        <div className="container mx-auto">
             <Toaster />
 
-            <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
+            <div className="flex justify-center mb-8 mt-4">
+                <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
+            </div>
 
-            <form action="/auth/signout" method="post">
-                <button
-                    type="submit"
-                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded duration-300 hover:scale-110"
-                >
-                    Sign out
-                </button>
-            </form>
+            <div className="flex justify-between items-center mb-8">
+                <Link href='/' className="bg-blue-500 hover:bg-blue-600 text-white text-center font-bold py-2 px-4 w-24 rounded duration-300 hover:scale-105">ホーム</Link>
 
-            <Link href='/' scroll={false}>ホーム</Link><br />
+                <form action="/auth/signout" method="post">
+                    <button
+                        type="submit"
+                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 w-24 rounded duration-300 hover:scale-105"
+                    >
+                        Sign out
+                    </button>
+                </form>
+            </div>
 
-            <h1>Welcome, <b style={{color: 'blue'}}>{email}</b></h1>
+            <h3 className="text-xl font-bold">Welcome, <span className="text-blue-600">{email}</span>！</h3>
 
-            <h2>tagで絞り込み検索</h2>
-            <input
-                type="text"
-                placeholder="検索したいtagを入力"
-                onChange={e => handleSearchTag(e)}
-            />
+            <hr className="border-t-slate-950 my-10" />
 
-            <hr />
+            <div className="mb-8">
+                <h2 className="text-xl font-semibold mb-4">タグで絞り込み検索</h2>
+                <input
+                    type="text"
+                    placeholder="検索したいタグを入力 (入力されたタグを持つTodoが表示されます)"
+                    onChange={e => handleSearchTag(e)}
+                    className="w-full p-2 border border-gray-300 rounded"
+                />
+            </div>
 
-            <h2>あなたのTodo一覧</h2>
-            {todos.map((todo, index) => (
-                <ul key={index}>
-                    <li>{todo.content}</li>
-                    <button onClick={() => handleDeleteTodo(todo.id!)}>削除</button>&nbsp;
-                    <button onClick={() => handleUpdateTodo(todo.id!, todo.content)}>編集</button>&nbsp;
-                    <Link href={`/tags/${todo.id}`} scroll={false}>タグ一覧</Link>
-                </ul>
-            ))}
+            <h2 className="text-3xl font-semibold mb-6">あなたのTodo一覧</h2>
+            <ul className="space-y-4">
+                {todos.map((todo, index) => (
+                    <li key={index} className="shadow-md border-2 rounded-lg p-4 flex justify-between items-center">
+                        <span className="text-lg">{todo.content}</span>
+                        <div className="space-x-2">
+                            <button 
+                                onClick={() => handleDeleteTodo(todo.id!)}
+                                className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
+                            >
+                                削除
+                            </button>
+                            <button 
+                                onClick={() => handleUpdateTodo(todo.id!, todo.content)}
+                                className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded"
+                            >
+                                編集
+                            </button>
+                            <Link 
+                                href={`/tags/${todo.id}`}
+                                className="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded inline-block"
+                            >
+                                タグ一覧
+                            </Link>
+                        </div>
+                    </li>
+                ))}
+            </ul>
 
-            <br /><hr /><br />
+            <hr className="border-t-slate-950 my-10" />
 
-            <h1>Todoを追加</h1>
-            <form onSubmit={handleCreateTodoAndTags}>
+            <h1 className="text-3xl font-bold mb-6">Todoを追加</h1>
+            <form onSubmit={handleCreateTodoAndTags} className="space-y-4">
                 <input
                     type="text"
                     placeholder="Todoを入力"
@@ -308,15 +334,22 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                     onChange={(e) => setContent(e.target.value)}
                     ref={inputRef}
                     required
+                    className="w-full p-2 border border-gray-300 rounded"
                 />
                 <TagsInput
                     value={tags}
-                    placeHolder="tagを入力してEnter(任意/複数入力可)"
+                    placeHolder="各タグを入力し終わったらEnter (任意/複数入力可)"
                     onChange={setTags}
                 />
-                <button type="submit" disabled={isLoading}>追加</button>
+                <button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+                >
+                    追加
+                </button>
             </form>
-        </>
+        </div>
     );
 };
 
