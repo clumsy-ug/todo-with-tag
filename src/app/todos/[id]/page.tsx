@@ -263,11 +263,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
         <div className="container mx-auto">
             <Toaster />
 
-            <div className="flex justify-center mb-8 mt-4">
-                <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
-            </div>
-
-            <div className="flex justify-between items-center mb-8">
+            <div className="flex justify-between items-center mb-8 mt-6">
                 <Link href='/' className="bg-blue-500 hover:bg-blue-600 text-white text-center font-bold py-2 px-4 w-24 rounded duration-300 hover:scale-105">ホーム</Link>
 
                 <form action="/auth/signout" method="post">
@@ -284,17 +280,21 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
 
             <hr className="border-t-slate-950 my-10" />
 
+            <div className="flex justify-center">
+                <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
+            </div>
+
             <div className="mb-8">
-                <h2 className="text-xl font-semibold mb-4">タグで絞り込み検索</h2>
+                <h2 className="text-xl font-bold mb-4">タグで絞り込み検索</h2>
                 <input
                     type="text"
                     placeholder="検索したいタグを入力 (入力されたタグを持つTodoが表示されます)"
                     onChange={e => handleSearchTag(e)}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-3 border border-gray-300 rounded"
                 />
             </div>
 
-            <h2 className="text-3xl font-semibold mb-6">あなたのTodo一覧</h2>
+            <h2 className="text-3xl font-bold mb-6">あなたのTodo一覧</h2>
             <ul className="space-y-4">
                 {todos.map((todo, index) => (
                     <li key={index} className="shadow-md border-2 rounded-lg p-4 flex justify-between items-center">
