@@ -22,6 +22,7 @@ const Home = () => {
                     <Link
                         href="/login"
                         className="inline-block bg-indigo-600 text-white text-lg font-semibold py-3 px-8 rounded-full hover:bg-indigo-700 transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
+                        scroll={false}
                     >
                         はじめる
                     </Link>

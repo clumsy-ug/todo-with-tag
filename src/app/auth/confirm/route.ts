@@ -1,4 +1,4 @@
-// signupの際にgmailに送られてくるリンクを押したときにこのファイルが参照される
+// signupの際にメアドに送られてくるリンクを押したときにこのファイルが参照される
 
 import { type EmailOtpType } from "@supabase/supabase-js";
 import { type NextRequest } from "next/server";
@@ -20,11 +20,9 @@ export async function GET(request: NextRequest) {
             token_hash,
         });
         if (!error) {
-            // redirect user to specified redirect URL or root of app
             redirect(next);
         }
     }
 
-    // redirect the user to an error page with some instructions
     redirect("/error");
 }
