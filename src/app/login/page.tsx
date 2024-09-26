@@ -41,7 +41,7 @@ const LoginPage = async () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="flex justify-center items-center min-h-screen bg-gray-100">
             <form className="bg-white p-8 rounded-lg shadow-md w-96">
                 <div className="mb-4">
                     <label
