@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Home = () => {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center">
             <div className="max-w-2xl w-full bg-white rounded-xl shadow-2xl p-10 space-y-8">
                 <h1 className="text-4xl font-bold text-center text-indigo-600">
                     Welcome to Your Todo App
