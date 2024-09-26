@@ -265,6 +265,8 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
 
             <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
 
+            <Link href='/' scroll={false}>ホーム</Link><br />
+
             <h1>Welcome, <b style={{color: 'blue'}}>{email}</b></h1>
 
             <h2>tagで絞り込み検索</h2>
