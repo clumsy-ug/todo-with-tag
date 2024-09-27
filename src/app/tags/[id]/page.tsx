@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ClipLoader } from "react-spinners";
 import toast, { Toaster } from "react-hot-toast";
 import { createClient } from "@/supabase/client";
@@ -11,6 +12,7 @@ import deleteTag from "@/supabase/CRUD/tag/deleteTag";
 import updateTag from "@/supabase/CRUD/tag/updateTag";
 import insertTodoIdAndTagId from "@/supabase/CRUD/todo/insertTodoIdAndTagId";
 import insertTag from "@/supabase/CRUD/tag/insertTag";
+import { Session } from "@supabase/supabase-js";
 
 const TodoTags = ({ params }: { params: { id: string } }) => {
     const todoId = params.id;
@@ -19,12 +21,27 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [userId, setUserId] = useState<string>('');
     const [newTagName, setNewTagName] = useState<string>('');
+    const router = useRouter();
 
     useEffect(() => {
         setIsLoading(true);
 
         const initialization = async () => {
             try {
+                setIsLoading(true);
+
+                // Sessionが無い場合は強制的にloginページに飛ばす
+                let globalSession: Session | null = null;
+                try {
+                    const { data: { session } } = await supabase.auth.getSession();
+                    if (session) globalSession = session;
+                } catch (e) {
+                    console.error("UserTodos関数内のgetSessionのe->", e);
+                }
+                if (!globalSession) {
+                    router.push('/login');
+                }
+
                 const tagIdsObj = await selectTagIds(todoId);
 
                 try {
