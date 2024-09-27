@@ -1,7 +1,7 @@
-import { login, signup } from "./actions";
+import { redirect } from "next/navigation";
 import { createClient } from "@/supabase/server";
 import { Session } from "@supabase/supabase-js";
-import { redirect } from "next/navigation";
+import { login, signup } from "./actions";
 import selectUser from '@/supabase/CRUD/user/selectUser';
 import insertUser from '@/supabase/CRUD/user/insertUser';
 
