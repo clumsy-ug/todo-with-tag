@@ -302,19 +302,19 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                         <div className="space-x-2">
                             <button 
                                 onClick={() => handleDeleteTodo(todo.id!)}
-                                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
+                                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg"
                             >
                                 削除
                             </button>
                             <button 
                                 onClick={() => handleUpdateTodo(todo.id!, todo.content)}
-                                className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded"
+                                className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg"
                             >
                                 編集
                             </button>
                             <Link 
                                 href={`/tags/${todo.id}`}
-                                className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded inline-block"
+                                className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg inline-block"
                             >
                                 タグ一覧
                             </Link>
