@@ -147,11 +147,22 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
         <div className="container mx-auto">
             <Toaster />
             
-            <form action={`/todos/${userId}`} method="get">
-                <button className="bg-blue-500 text-white rounded-lg py-2 px-4 mt-4 duration-300 hover:scale-105 hover:underline">
-                    Todo一覧
-                </button>
-            </form>
+            <div className="flex justify-between items-center mt-6">
+                <form action={`/todos/${userId}`} method="get">
+                    <button className="bg-blue-500 text-white rounded-lg py-2 px-4 duration-300 hover:scale-105 hover:underline">
+                        Todo一覧
+                    </button>
+                </form>
+
+                <form action="/auth/signout" method="post">
+                    <button
+                        type="submit"
+                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded duration-300 hover:scale-105"
+                    >
+                        Sign out
+                    </button>
+                </form>
+            </div>
 
             <hr className="border-t-slate-950 my-10" />
 
@@ -195,7 +206,7 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
             )}
 
             <h1 className="text-3xl font-bold mb-6">タグを追加</h1>
-            <form onSubmit={handleCreateTag} className="mb-9 space-y-2">
+            <form onSubmit={handleCreateTag} className="mb-6 space-y-2">
                 <input
                     type="text"
                     placeholder="タグを入力"
