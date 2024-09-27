@@ -1,6 +1,13 @@
 "use client";
 
-import { Todo } from "@/types";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { createClient } from "@/supabase/client";
+import { Session } from "@supabase/supabase-js";
+import toast, { Toaster } from "react-hot-toast";
+import { ClipLoader } from "react-spinners";
+import { TagsInput } from "react-tag-input-component";
 import { selectTodosByUserId } from "@/supabase/CRUD/todo/selectTodos";
 import selectTodoIds from "@/supabase/CRUD/todo/selectTodoIds";
 import { selectTodosByTodoIds } from "@/supabase/CRUD/todo/selectTodos";
@@ -10,14 +17,7 @@ import updateTodo from "@/supabase/CRUD/todo/updateTodo";
 import deleteTodo from "@/supabase/CRUD/todo/deleteTodo";
 import insertTag from "@/supabase/CRUD/tag/insertTag";
 import insertTodoIdAndTagId from "@/supabase/CRUD/todo/insertTodoIdAndTagId";
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import toast, { Toaster } from "react-hot-toast";
-import { createClient } from "@/supabase/client";
-import { ClipLoader } from "react-spinners";
-import Link from "next/link";
-import { TagsInput } from "react-tag-input-component";
-import { Session } from "@supabase/supabase-js";
+import { Todo } from "@/types";
 
 const UserTodos = ({ params }: { params: { id: string } }) => {
     const userId = params.id;  // ただurlに入力されている文字列(信頼性低いが即取得可)
