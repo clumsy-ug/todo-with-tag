@@ -264,7 +264,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             <Toaster />
 
             <div className="flex justify-between items-center mb-8 mt-6">
-                <Link href='/' className="bg-blue-500 hover:bg-blue-600 text-white text-center font-bold py-2 px-4 w-24 rounded duration-300 hover:scale-105">ホーム</Link>
+                <Link href='/' className="bg-blue-500 hover:bg-blue-600 text-white text-center font-bold py-2 px-4 w-24 rounded duration-300 hover:scale-105 hover:underline">ホーム</Link>
 
                 <form action="/auth/signout" method="post">
                     <button
