@@ -1,0 +1,13 @@
+services:
+  front:
+    container_name: front
+    build:
+      context: .  # Dockerfileが存在するプロジェクトのルート
+    ports:
+      - "3000:3000"  # ホストのポート3000をコンテナのポート3000にバインド
+    volumes:
+      - ./:/app  # ホストのプロジェクト全体(./)をコンテナ内の/appにマウント
+      - /app/node_modules  # ホストのnode_modulesをリンクせずに、コンテナ内のものを使用する設定。ホストにnode_modulesが大量にある場合に使う
+    environment:
+      - WATCHPACK_POLLING=true  # ファイル変更を検知するためにポーリングを使う設定。Windows等で効果的
+    restart: always  # コンテナが停止したときに自動的に再起動する設定
