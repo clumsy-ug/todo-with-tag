@@ -285,7 +285,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             </div>
 
             <div className="mb-8">
-                <h3 className="text-xl font-bold mb-4">タグで絞り込み検索</h3>
+                <h3 className="text-xl mb-4">タグで絞り込み検索</h3>
                 <input
                     type="text"
                     placeholder="検索したいタグを入力 (入力されたタグを持つTodoが表示されます)"
@@ -326,7 +326,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             <hr className="border-t-slate-950 my-10" />
 
             <h1 className="text-3xl font-bold mb-6">Todoを追加</h1>
-            <form onSubmit={handleCreateTodoAndTags} className="space-y-4">
+            <form onSubmit={handleCreateTodoAndTags} className="space-y-3">
                 <input
                     type="text"
                     placeholder="Todoを入力"
