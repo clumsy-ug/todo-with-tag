@@ -1,7 +1,6 @@
-# Tag-Todo
-Your personalized todo app
+# Your personalized todo app
 
-[Use in your browser](link)
+[Try in your browser](link)
 
 ## What you can do
 - Signin/Signup/Signout by email and password
@@ -38,7 +37,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<YOUR_SUPABASE_ANON_KEY>
 docker compose up --build
 ```
 
-If you want to rebuild dependencies or the entire system, ignoring the cache, you can use
+` `If you want to rebuild dependencies or the entire system, ignoring the cache, you can use
 ```bash
 docker compose up --build --no-cache
 ```
