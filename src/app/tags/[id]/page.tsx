@@ -3,16 +3,16 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ClipLoader } from "react-spinners";
-import toast, { Toaster } from "react-hot-toast";
 import { createClient } from "@/supabase/client";
-import { Tag } from "@/types";
+import { Session } from "@supabase/supabase-js";
+import toast, { Toaster } from "react-hot-toast";
 import selectTagIds from "@/supabase/CRUD/tag/selectTagIds";
 import { selectTagsByTagIds } from "@/supabase/CRUD/tag/selectTags";
-import deleteTag from "@/supabase/CRUD/tag/deleteTag";
-import updateTag from "@/supabase/CRUD/tag/updateTag";
 import insertTodoIdAndTagId from "@/supabase/CRUD/todo/insertTodoIdAndTagId";
 import insertTag from "@/supabase/CRUD/tag/insertTag";
-import { Session } from "@supabase/supabase-js";
+import updateTag from "@/supabase/CRUD/tag/updateTag";
+import deleteTag from "@/supabase/CRUD/tag/deleteTag";
+import { Tag } from "@/types";
 
 const TodoTags = ({ params }: { params: { id: string } }) => {
     const todoId = params.id;
