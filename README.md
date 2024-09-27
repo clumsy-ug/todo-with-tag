@@ -37,7 +37,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<YOUR_SUPABASE_ANON_KEY>
 docker compose up --build
 ```
 
-` `If you want to rebuild dependencies or the entire system, ignoring the cache, you can use
+&nbsp;&nbsp;&nbsp;If you want to rebuild dependencies or the entire system, ignoring the cache, you can use
 ```bash
 docker compose up --build --no-cache
 ```
