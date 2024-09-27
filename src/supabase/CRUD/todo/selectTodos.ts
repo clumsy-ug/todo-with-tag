@@ -23,7 +23,7 @@ export const selectTodosByUserId = async (userId: string): Promise<Todo[] | null
     }
 }
 
-export const selectTodosByTodoIds = async (todoIds: string[]): Promise<Todo[] | null> => {
+export const selectTodosByTodoIds = async (todoIds: string[], userId: string): Promise<Todo[] | null> => {
     const supabase = createClient();
 
     try {
@@ -31,6 +31,7 @@ export const selectTodosByTodoIds = async (todoIds: string[]): Promise<Todo[] | 
             .from('todos')
             .select()
             .in('id', todoIds)
+            .eq('user_id', userId);
 
         if (error) {
             console.error('selectTodosByTodoIds内のerror->', error);

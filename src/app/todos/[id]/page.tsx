@@ -251,7 +251,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                     const filteredTodoIds = filteredTodoIdsRow?.map(todoIdObj => todoIdObj.todo_id);
                     if (filteredTodoIds) {
                         try {
-                            const filteredTodos = await selectTodosByTodoIds(filteredTodoIds);
+                            const filteredTodos = await selectTodosByTodoIds(filteredTodoIds, userId);
                             if (filteredTodos) {
                                 filteredTodos.sort((a, b) => a.content.localeCompare(b.content, undefined, { numeric: true }));
                                 setTodos(filteredTodos);
