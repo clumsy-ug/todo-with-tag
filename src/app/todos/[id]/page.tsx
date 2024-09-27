@@ -11,11 +11,13 @@ import deleteTodo from "@/supabase/CRUD/todo/deleteTodo";
 import insertTag from "@/supabase/CRUD/tag/insertTag";
 import insertTodoIdAndTagId from "@/supabase/CRUD/todo/insertTodoIdAndTagId";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { createClient } from "@/supabase/client";
 import { ClipLoader } from "react-spinners";
 import Link from "next/link";
 import { TagsInput } from "react-tag-input-component";
+import { Session } from "@supabase/supabase-js";
 
 const UserTodos = ({ params }: { params: { id: string } }) => {
     const userId = params.id;  // ただurlに入力されている文字列(信頼性低いが即取得可)
@@ -25,8 +27,9 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
     const [email, setEmail] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
-    const supabase = createClient();
     const [tags, setTags] = useState<string[]>([]);
+    const supabase = createClient();
+    const router = useRouter();
 
     useEffect(() => {
         setIsLoading(true);
@@ -35,8 +38,22 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             /* Userを取得 */
             try {
                 setIsLoading(true);
+
+                // Sessionが無い場合は強制的にloginページに飛ばす
+                let globalSession: Session | null = null;
+                try {
+                    const { data: { session } } = await supabase.auth.getSession();
+                    if (session) globalSession = session;
+                } catch (e) {
+                    console.error("UserTodos関数内のgetSessionのe->", e);
+                }
+                if (!globalSession) {
+                    router.push('/login');
+                }
+
                 const { data: { user } } = await supabase.auth.getUser();
 
+                // userのidとemailをstateとして保存
                 if (user && user.id) {
                     setSessionUserId(user.id);
                 } else {
