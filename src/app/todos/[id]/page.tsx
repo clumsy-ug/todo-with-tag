@@ -285,7 +285,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             </div>
 
             <div className="mb-8">
-                <h2 className="text-xl font-bold mb-4">タグで絞り込み検索</h2>
+                <h3 className="text-xl font-bold mb-4">タグで絞り込み検索</h3>
                 <input
                     type="text"
                     placeholder="検索したいタグを入力 (入力されたタグを持つTodoが表示されます)"
@@ -294,7 +294,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                 />
             </div>
 
-            <h2 className="text-3xl font-bold mb-6">あなたのTodo一覧</h2>
+            <h1 className="text-3xl font-bold mb-6">あなたのTodo一覧</h1>
             <ul className="space-y-4">
                 {todos.map((todo, index) => (
                     <li key={index} className="shadow-md border-2 rounded-lg p-4 flex justify-between items-center">
