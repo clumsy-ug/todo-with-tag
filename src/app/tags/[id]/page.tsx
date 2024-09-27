@@ -168,13 +168,13 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                 <div className="container mx-auto flex justify-between items-center">
                     <div className="flex space-x-4">
                         <form action={`/todos/${userId}`} method="get">
-                            <button className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                            <button className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:underline">
                                 Todo一覧
                             </button>
                         </form>
 
                         <form action="/" method="get">
-                            <button className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                            <button className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:underline">
                                 ホーム
                             </button>
                         </form>
