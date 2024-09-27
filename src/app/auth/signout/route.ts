@@ -2,10 +2,9 @@
 
 import { createClient } from "@/supabase/server";
 import { revalidatePath } from "next/cache";
-import { type NextRequest } from "next/server";
 import { redirect } from "next/navigation";
 
-export async function POST(req: NextRequest) {
+export async function POST() {
     const supabase = createClient();
 
     const { data: { user } } = await supabase.auth.getUser();
