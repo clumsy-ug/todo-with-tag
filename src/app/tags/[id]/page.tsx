@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
 import toast, { Toaster } from "react-hot-toast";
 import { createClient } from "@/supabase/client";
-import Link from "next/link";
 import { Tag } from "@/types";
 import selectTagIds from "@/supabase/CRUD/tag/selectTagIds";
 import { selectTagsByTagIds } from "@/supabase/CRUD/tag/selectTags";
@@ -145,42 +144,74 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
     }
 
     return (
-        <>
+        <div className="container mx-auto">
             <Toaster />
             
-            <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
+            <form action={`/todos/${userId}`} method="get">
+                <button className="bg-blue-500 text-white rounded-lg py-2 px-4 mt-4 duration-300 hover:scale-105">
+                    Todo一覧
+                </button>
+            </form>
 
-            <Link href={`/todos/${userId}`} scroll={false}>Todo一覧へ</Link>
+            <hr className="border-t-slate-950 my-10" />
+
+            <div className="flex justify-center">
+                <ClipLoader size={100} loading={isLoading} color={"#42e0f5"} />
+            </div>
 
             {tags.length === 0 ? (
-                <p>このtodoにtagは登録されていません</p>
+                <div className="flex justify-center items-center min-h-screen bg-gray-100">
+                    <div className="shadow-md rouded-lg p-4">
+                        <p className="text-xl text-red-600">このTodoにタグは登録されていません</p>
+                    </div>
+                </div>
             ) : (
-                <>
-                    <h1>tag一覧</h1>
-                    {tags.map((tag, index) => (
-                        <ul key={index}>
-                            <li>{tag.name}</li>
-                            <button onClick={() => handleDeleteTag(tag.id)}>削除</button>
-                            <button onClick={() => handleUpdateTag(tag.id, tag.name)}>編集</button>
-                        </ul>
-                    ))}
-                </>
+                <div>
+                    <h1 className="text-3xl font-bold mb-6">タグ一覧</h1>
+                    <ul className="space-y-4">
+                        {tags.map((tag, index) => (
+                            <li key={index} className="rounded-lg shadow-md border-2 p-4 flex justify-between items-center">
+                                <span className="text-lg">{tag.name}</span>
+                                <div className="space-x-2">
+                                    <button
+                                        onClick={() => handleDeleteTag(tag.id)}
+                                        className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600"
+                                    >
+                                        削除
+                                    </button>
+                                    <button
+                                        onClick={() => handleUpdateTag(tag.id, tag.name)}
+                                        className="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600"
+                                    >
+                                        編集
+                                    </button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+
+                    <hr className="border-t-slate-950 my-10" />
+                </div>
             )}
 
-            <hr />
-
-            <h1>tagを追加</h1>
-            <form onSubmit={handleCreateTag}>
+            <h1 className="text-3xl font-bold mb-6">タグを追加</h1>
+            <form onSubmit={handleCreateTag} className="mb-9 space-y-2">
                 <input
                     type="text"
-                    placeholder="tag名を入力"
+                    placeholder="タグを入力"
                     value={newTagName}
                     onChange={(e) => setNewTagName(e.target.value)}
                     required
+                    className="w-full p-3 border border-gray-300 rounded"
                 />
-                <button type="submit">登録</button>
+                <button
+                    type="submit"
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+                >
+                    登録
+                </button>
             </form>
-        </>
+        </div>
     )
 }
 
