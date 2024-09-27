@@ -173,7 +173,7 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                             </button>
                         </form>
 
-                        <form action="/home" method="get">
+                        <form action="/" method="get">
                             <button className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
                                 ホーム
                             </button>

@@ -283,7 +283,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             <nav className="bg-gray-700 p-4 rounded-t-lg sticky top-0">
                 <div className="container mx-auto flex justify-between items-center">
                     <div className="flex space-x-4">
-                        <form action="/home" method="get">
+                        <form action="/" method="get">
                             <button className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
                                 ホーム
                             </button>
