@@ -155,10 +155,10 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
         try {
             const isSuccess = await updateTodo(todoId, newContent);
             if (isSuccess) {
-                toast.success('編集完了!');
                 try {
                     const newTodos = await selectTodosByUserId(userId);
                     if (newTodos) {
+                        toast.success('編集完了!');
                         newTodos.sort((a, b) => a.content.localeCompare(b.content, undefined, { numeric: true }));
                         setTodos(newTodos);
                     } else {
