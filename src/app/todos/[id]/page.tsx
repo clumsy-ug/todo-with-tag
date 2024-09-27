@@ -317,7 +317,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                     type="text"
                     placeholder="検索したいタグを入力 (入力されたタグを持つTodoが表示されます)"
                     onChange={e => handleSearchTag(e)}
-                    className="w-full p-3 border border-gray-300 rounded"
+                    className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
             </div>
 
@@ -361,7 +361,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                     onChange={(e) => setContent(e.target.value)}
                     ref={inputRef}
                     required
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <TagsInput
                     value={tags}
