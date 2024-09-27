@@ -326,7 +326,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             <hr className="border-t-slate-950 my-10" />
 
             <h1 className="text-3xl font-bold mb-6">Todoを追加</h1>
-            <form onSubmit={handleCreateTodoAndTags} className="space-y-3">
+            <form onSubmit={handleCreateTodoAndTags} className="space-y-3 mb-6">
                 <input
                     type="text"
                     placeholder="Todoを入力"
