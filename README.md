@@ -43,7 +43,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<YOUR_SUPABASE_ANON_KEY>
 docker compose up --build
 ```
 
-&nbsp;&nbsp;&nbsp;キャッシュを無視して依存関係やシステム全体を再構築したい場合は
+&nbsp;&nbsp;&nbsp;キャッシュを無視して依存関係やシステム全体を再構築したい場合は以下
 ```bash
 docker compose up --build --no-cache
 ```
