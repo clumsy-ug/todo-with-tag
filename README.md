@@ -15,27 +15,27 @@
 
 ### Setup
 
-1. Clone the repository
+**1. Clone the repository**
 ```bash
 git clone https://github.com/clumsy-ug/todo-with-tag.git
 cd todo-with-tag
 ```
 
-2. Create an .env.local file based on .env.example
+**2. Create an .env.local file based on .env.example**
 ```bash
 cp .env.example .env.local
 ```
 
-3. Add your Supabase credentials to .env.local
+**3. Add your Supabase credentials to .env.local**
 ```
 NEXT_PUBLIC_SUPABASE_URL=<YOUR_SUPABASE_URL>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<YOUR_SUPABASE_ANON_KEY>
 ```
 
-4. Build and run the app with Docker Compose
+**4. Build and run the app with Docker Compose**
 
 > [!TIP]
-> If you are using Windows, the heaviness of the process can be improved a little by setting up the project in the WSL2 environment and launching Docker from there, rather than in the Windows environment.
+> If you are using Windows, the heaviness of the process can be improved a little by setting up the project in the **WSL2** environment and launching Docker from there, rather than in the Windows environment.
 
 ```bash
 docker compose up --build
@@ -46,4 +46,4 @@ docker compose up --build
 docker compose up --build --no-cache
 ```
 
-5. Open your browser at http://localhost:3000 to view the app.
+**5. Open your browser at http://localhost:3000 to view the app.**
