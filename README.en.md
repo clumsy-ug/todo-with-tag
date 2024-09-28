@@ -1,3 +1,5 @@
+[日本語](./README.md)
+
 # Your personalized todo app
 
 [Try in browser](https://todo-with-tag.vercel.app/)
