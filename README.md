@@ -47,3 +47,13 @@ docker compose up --build --no-cache
 ```
 
 **5. Open your browser at http://localhost:3000 to view the app.**
+
+## Technical Configuration
+
+| Field          | Technology                                                           |
+| -------------  | -------------------------------------------------------------------- |
+| Frontend       | TypeScript(5.4.5), React(18.0), Next.js(14.2.10), Tailwind(3.4.1)    |
+| Backend        | @supabase/ssr(0.5.1), @supabase/supabase-js(2.45.4)                  |
+| Database       | PostgreSQL(15.6)                                                     |
+| Infrastructure | Vercel(37.6.0)                                                       |
+| Environment    | Node.js(20.14.0) / Docker(27.2.0), Docker Compose(2.28.1)            |
