@@ -48,7 +48,7 @@ docker compose up --build
 docker compose up --build --no-cache
 ```
 
-**5. http://localhost:3000 をブラウザを開いてアプリを表示**
+**5. http://localhost:3000 をブラウザで開いてアプリを表示**
 
 ## 技術構成
 
