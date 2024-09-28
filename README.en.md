@@ -10,7 +10,7 @@
 
 ## Getting Started
 
-### Prerequisites
+### Requirement
 - Docker Desktop(includes Docker CLI and Docker Compose)
 
 ### Setup
