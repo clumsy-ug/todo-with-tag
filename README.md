@@ -33,6 +33,10 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<YOUR_SUPABASE_ANON_KEY>
 ```
 
 4. Build and run the app with Docker Compose
+
+> [!TIP]
+> If you are using Windows, the heaviness of the process can be improved a little by setting up the project in the WSL2 environment and launching Docker from there, rather than in the Windows environment.
+
 ```bash
 docker compose up --build
 ```
