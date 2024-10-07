@@ -28,13 +28,20 @@ cd todo-with-tag
 cp .env.example .env.local
 ```
 
-**3. Supabaseの認証情報を.env.localに追加**
+**3. Supabaseでプロジェクトを作成**
+
+**4. Supabaseの認証情報を.env.localに追加**
 ```
 NEXT_PUBLIC_SUPABASE_URL=<YOUR_SUPABASE_URL>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<YOUR_SUPABASE_ANON_KEY>
 ```
 
-**4. Docker Composeでアプリをビルドして実行**
+**5. (Node.jsを使う場合) 開発用サーバーを起動**
+```bash
+npm run dev
+```
+
+**5. (Dockerを使う場合) Docker Composeでアプリをビルドして実行**
 
 > [!TIP]
 > Windowsを使用している場合は、Windows環境ではなく**WSL2**環境にプロジェクトを設置し、そこからDockerを起動することで、処理の重さを少し改善できます。
@@ -48,7 +55,7 @@ docker compose up --build
 docker compose up --build --no-cache
 ```
 
-**5. http://localhost:3000 をブラウザで開いてアプリを表示**
+**6. http://localhost:3000 をブラウザで開いてアプリを表示**
 
 # 技術構成
 
