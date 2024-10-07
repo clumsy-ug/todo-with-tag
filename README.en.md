@@ -28,13 +28,20 @@ cd todo-with-tag
 cp .env.example .env.local
 ```
 
-**3. Add your Supabase credentials to .env.local**
+**3. Create a project in Supabase**
+
+**4. Add your Supabase credentials to .env.local**
 ```
 NEXT_PUBLIC_SUPABASE_URL=<YOUR_SUPABASE_URL>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<YOUR_SUPABASE_ANON_KEY>
 ```
 
-**4. Build and run the app with Docker Compose**
+**5. (When using Node.js) Start the development server**
+```bash
+npm run dev
+```
+
+**5. (If you use Docker) Build and run the app with Docker Compose**
 
 > [!TIP]
 > If you are using Windows, the heaviness of the process can be improved a little by setting up the project in the **WSL2** environment and launching Docker from there, rather than in the Windows environment.
@@ -48,7 +55,7 @@ docker compose up --build
 docker compose up --build --no-cache
 ```
 
-**5. Open your browser at http://localhost:3000 to view the app.**
+**6. Open your browser at http://localhost:3000 to view the app.**
 
 # Technical Configuration
 
