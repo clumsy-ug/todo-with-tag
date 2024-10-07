@@ -36,7 +36,7 @@ NEXT_PUBLIC_SUPABASE_URL=<YOUR_SUPABASE_URL>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<YOUR_SUPABASE_ANON_KEY>
 ```
 
-**5. (When using Node.js) Start the development server**
+**5. (If you use Node.js) Start the development server**
 ```bash
 npm run dev
 ```
