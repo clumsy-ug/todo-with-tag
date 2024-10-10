@@ -42,8 +42,6 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                     router.push('/login');
                 }
 
-                const tagIdsObj = await selectTagIds(todoId);
-
                 try {
                     const {data: { user }} = await supabase.auth.getUser();
                     if (user && user.id) {
@@ -53,6 +51,7 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                     console.error('getUserでe->', e);
                 }
 
+                const tagIdsObj = await selectTagIds(todoId);
                 if (tagIdsObj && tagIdsObj.length >= 1) {
                     const tagIds = tagIdsObj.map(tagIdObj => tagIdObj.tag_id);
                     try {
