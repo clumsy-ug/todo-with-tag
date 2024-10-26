@@ -85,7 +85,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             }
         };
         initialization();
-    }, []);
+    }, [router, supabase.auth, userId]);
 
     const handleCreateTodoAndTags = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
