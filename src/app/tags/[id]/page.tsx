@@ -73,7 +73,7 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
             }
         }   
         initialization();
-    }, []);
+    }, [router, supabase.auth, todoId]);
 
     const handleCreateTag = async (e: React.FormEvent<HTMLElement>) => {
         e.preventDefault();
