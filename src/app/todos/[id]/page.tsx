@@ -26,8 +26,8 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [email, setEmail] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
-    const inputRef = useRef<HTMLInputElement>(null);
     const [tags, setTags] = useState<string[]>([]);
+    const inputRef = useRef<HTMLInputElement>(null);
     const supabase = createClient();
     const router = useRouter();
 
@@ -321,34 +321,47 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                 />
             </div>
 
-            <h1 className="text-3xl font-bold mb-6">あなたのTodo一覧</h1>
-            <ul className="space-y-4">
-                {todos.map((todo, index) => (
-                    <li key={index} className="shadow-md border-2 rounded-lg p-4 flex justify-between items-center">
-                        <span className="text-lg">{todo.content}</span>
-                        <div className="space-x-2">
-                            <button 
-                                onClick={() => handleDeleteTodo(todo.id!)}
-                                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg"
-                            >
-                                削除
-                            </button>
-                            <button 
-                                onClick={() => handleUpdateTodo(todo.id!, todo.content)}
-                                className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg"
-                            >
-                                編集
-                            </button>
-                            <Link 
-                                href={`/tags/${todo.id}`}
-                                className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg inline-block"
-                            >
-                                タグ一覧
-                            </Link>
-                        </div>
-                    </li>
-                ))}
-            </ul>
+            {/* ちらつき確認用 */}
+            <p className="text-red-600">あいうえお: {isLoading.toString()}</p>
+
+            {todos.length === 0 ? (
+                <div className="flex justify-center items-center min-h-screen bg-gray-100">
+                    <div className="shadow-md rouded-lg p-4">
+                        <p className="text-xl text-red-600">Todoが登録されていません</p>
+                    </div>
+                </div>
+            ) : (
+            <>
+                <h1 className="text-3xl font-bold mb-6">あなたのTodo一覧</h1>
+                <ul className="space-y-4">
+                    {todos.map((todo, index) => (
+                        <li key={index} className="shadow-md border-2 rounded-lg p-4 flex justify-between items-center">
+                            <span className="text-lg">{todo.content}</span>
+                            <div className="space-x-2">
+                                <button 
+                                    onClick={() => handleDeleteTodo(todo.id!)}
+                                    className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg"
+                                >
+                                    削除
+                                </button>
+                                <button 
+                                    onClick={() => handleUpdateTodo(todo.id!, todo.content)}
+                                    className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg"
+                                >
+                                    編集
+                                </button>
+                                <Link 
+                                    href={`/tags/${todo.id}`}
+                                    className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg inline-block"
+                                >
+                                    タグ一覧
+                                </Link>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </>
+            )}
 
             <hr className="border-t-slate-950 my-10" />
 
