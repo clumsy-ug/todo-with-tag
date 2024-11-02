@@ -41,37 +41,55 @@ const TodoTags = ({ params }: { params: { id: string } }) => {
                 if (!globalSession) {
                     router.push('/login');
                 }
-
-                try {
-                    const {data: { user }} = await supabase.auth.getUser();
-                    if (user && user.id) {
-                        setUserId(user.id);
-                    }
-                } catch (e) {
-                    console.error('getUserでe->', e);
-                }
-
-                const tagIdsObj = await selectTagIds(todoId);
-                if (tagIdsObj && tagIdsObj.length >= 1) {
-                    const tagIds = tagIdsObj.map(tagIdObj => tagIdObj.tag_id);
-                    try {
-                        const tagsObj = await selectTagsByTagIds(tagIds);
-                        if (tagsObj) {
-                            tagsObj.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
-                            setTags(tagsObj);
-                        } else {
-                            console.error('selectTagsでfalsyな値が返ってきました!');
-                        }
-                    } catch (e) {
-                        console.error('selectTagsでe->', e);
-                    }
-                }
             } catch (e) {
                 console.error('selectTagIdsでe->', e);
             } finally {
                 setIsLoading(false);
             }
-        }   
+        }
+        initialization();
+    }, [supabase.auth, router]);
+
+    useEffect(() => {
+        setIsLoading(false);
+        
+        const initialization = async () => {
+            try {
+                const {data: { user }} = await supabase.auth.getUser();
+                if (user && user.id) {
+                    setUserId(user.id);
+                }
+            } catch (e) {
+                console.error('getUserでe->', e);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        initialization();
+    }, [supabase.auth]);
+
+    useEffect(() => {
+        setIsLoading(false);
+
+        const initialization = async () => {
+            const tagIdsObj = await selectTagIds(todoId);
+            if (tagIdsObj && tagIdsObj.length >= 1) {
+                const tagIds = tagIdsObj.map(tagIdObj => tagIdObj.tag_id);
+                try {
+                    const tagsObj = await selectTagsByTagIds(tagIds);
+                    if (tagsObj) {
+                        tagsObj.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+                        setTags(tagsObj);
+                    } else {
+                        console.error('selectTagsでfalsyな値が返ってきました!');
+                    }
+                } catch (e) {
+                    console.error('selectTagsでe->', e);
+                } finally {
+                setIsLoading(false);
+            }
+            }
+        }
         initialization();
     }, [todoId]);
 

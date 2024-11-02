@@ -50,25 +50,46 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
                 if (!globalSession) {
                     router.push('/login');
                 }
+            } catch (e) {
+                console.error('getUserで発生したeー->', e);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        initialization();
+    }, [supabase.auth, router]);
 
+    useEffect(() => {
+        setIsLoading(true);
+
+        const initialization = async () => {
+            try {
                 const { data: { user } } = await supabase.auth.getUser();
-
                 // userのidとemailをstateとして保存
                 if (user && user.id) {
                     setSessionUserId(user.id);
                 } else {
                     console.error('userもしくはuserのidが見つかりません');
                 }
-
+        
                 if (user && user.email) {
                     setEmail(user.email);
                 } else {
                     console.error('userもしくはuserのemailが見つかりません');
-                }            
+                }
             } catch (e) {
-                console.error('getUserで発生したeー->', e);
+                console.error('supabase.auth.getUser()でエラー', e);
+            } finally {
+                setIsLoading(false);
             }
+        }
+        initialization();
+    }, [supabase.auth])
 
+    useEffect(() => {
+        setIsLoading(true);
+        
+        const initialization = async () => {
             /* Userのtodo一覧を取得 */
             try {
                 const userTodos = await selectTodosByUserId(userId);
@@ -83,7 +104,7 @@ const UserTodos = ({ params }: { params: { id: string } }) => {
             } finally {
                 setIsLoading(false);
             }
-        };
+        }
         initialization();
     }, [userId]);
 
