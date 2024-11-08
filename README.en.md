@@ -112,3 +112,5 @@ The arrow in FK represents the referent; FK means influenced (synchronized) by t
 | ----------- | ---- | -------------------------- |
 | `todo_id`   | UUID | Todo ID (PK, FK->todos.id) |
 | `tag_id`    | UUID | Tag ID (PK)                |
+
+<img src="./src/images/image.png">
